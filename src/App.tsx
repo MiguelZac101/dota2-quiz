@@ -4,15 +4,25 @@ import { getHeroes } from './services/heroes'
 import type { Hero } from './types/hero'
 
 function App() {
-	const [heroes, setHeroes] = useState<Hero[]>([])
+	const [heroes, setHeroes] = useState<Hero[]>(() => {
+		// Intentamos cargar los héroes desde localStorage para evitar llamadas a la API
+		const storedHeroes = localStorage.getItem('heroes')
+		return storedHeroes ? JSON.parse(storedHeroes) : []
+	})
 	const [loading, setLoading] = useState(true)
 
+	// Cargamos los héroes al montar el componente
 	useEffect(() => {
+		// Si ya tenemos héroes en el estado (cargados desde localStorage), no hacemos la llamada a la API
+		if (heroes.length > 0) {
+			setLoading(false)
+			return
+		}
 		getHeroes()
-			.then(data => {
-				// Por ahora agarra 9 random para la grid 3x3
-				const shuffled = data.sort(() => 0.5 - Math.random())
-				setHeroes(shuffled.slice(0, 9))
+			.then(data => {				
+				setHeroes(data)
+				//guardar en localStorage para evitar futuras llamadas a la API
+				localStorage.setItem('heroes', JSON.stringify(data))
 				setLoading(false)
 			})
 			.catch(err => {
