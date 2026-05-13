@@ -98,7 +98,7 @@ function App() {
 			setShowResult(false)
 			setSelectedId(null)
 			setRoundsPlayed(prev => prev + 1)
-		}, 1000)
+		}, 500)
 	}
 
 	if (loading) {
