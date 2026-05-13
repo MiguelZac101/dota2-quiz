@@ -72,7 +72,7 @@ function App() {
 			const eightWrong = getRandomElements(wrongHeroes, 8)
 
 			// 6. Juntar y desordenar
-			const newGameHeroes = getRandomElements([oneCorrect, ...eightWrong], 9)
+			const newGameHeroes = [oneCorrect, ...eightWrong].sort(() => 0.5 - Math.random())
 
 			// 7. Guardamos el héroe objetivo para poder validar la respuesta del jugador después
 			setTargetHero(oneCorrect);
