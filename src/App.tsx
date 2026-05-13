@@ -16,6 +16,12 @@ function App() {
 	const [questionSelect, setQuestionSelect] = useState<Question | null>(null)
 	const [gameHeroes, setGameHeroes] = useState<Hero[]>([])
 
+	// Contador de rondas para disparar el useEffect de selección de héroes y pregunta cada vez que el jugador responde (o inicia el juego por primera vez)
+	const [roundsPlayed, setRoundsPlayed] = useState(0)
+	// Estado para guardar el héroe objetivo de la pregunta actual
+	const [targetHero, setTargetHero] = useState<Hero | null>(null)
+
+
 	// Cargamos los héroes al montar el componente
 	useEffect(() => {
 		// Si ya tenemos héroes en el estado (cargados desde localStorage), no hacemos la llamada a la API
@@ -51,7 +57,7 @@ function App() {
 			if (correctHeroes.length === 0) return
 
 			// 4. Agarrar 1 correcto random
-			const [oneCorrect] = getRandomElements(correctHeroes)
+			const [oneCorrect] = getRandomElements(correctHeroes)			 
 
 			// 5. Agarrar 8 incorrectos random sin mutar el array original
 			const eightWrong = getRandomElements(wrongHeroes, 8)
@@ -59,12 +65,22 @@ function App() {
 			// 6. Juntar y desordenar
 			const newGameHeroes = [oneCorrect, ...eightWrong].sort(() => 0.5 - Math.random())
 
+			// 7. Guardamos el héroe objetivo para poder validar la respuesta del jugador después
+			setTargetHero(oneCorrect);
+
+			// 8. Actualizamos los nuevos héroes en el grid
 			setGameHeroes(newGameHeroes)
 		}
-	}, [])
+	}, [roundsPlayed])
 
 	const handleAnswer = (id: number) => {
-		alert(`Elegiste el héroe con id: ${id}`)
+		// Validamos la respuesta comparando con el héroe objetivo guardado en el estado
+		if (targetHero && id === targetHero.id) {
+			alert('¡Correcto!')
+		} else {
+			alert(`Incorrecto. El héroe correcto era ${targetHero?.localized_name}`)
+		}		
+		setRoundsPlayed(prev => prev + 1)
 	}
 
 	if (loading) {
