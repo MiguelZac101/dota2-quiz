@@ -13,6 +13,7 @@ function App() {
 	})
 	const [loading, setLoading] = useState(true)
 	const [questionSelect, setQuestionSelect] = useState<Question | null>(null)
+	const [gameHeroes, setGameHeroes] = useState<Hero[]>([])
 
 	// Cargamos los héroes al montar el componente
 	useEffect(() => {
@@ -41,7 +42,14 @@ function App() {
 			const selectedQuestion = QUESTIONS[Math.floor(Math.random() * QUESTIONS.length)];
 			setQuestionSelect(selectedQuestion);
 
-			setHeroes(heroes.slice(0, 9))
+			//selecionar a los heroes que responden a la pregunta
+			const filteredHeroes = heroes.filter(selectedQuestion.filter);
+			//seleccionar uno al azar de los heroes que responden a la pregunta
+			const selectHeroe = filteredHeroes[Math.floor(Math.random() * filteredHeroes.length)];
+			//meterlo al grupo que se  mostrara en el grid
+			const newGameHeroes = [selectHeroe];
+
+			setGameHeroes(newGameHeroes)
 		}
 	}, [])
 
@@ -65,7 +73,7 @@ function App() {
 				</h1>
 
 				<div className="grid grid-cols-3 gap-4 mb-8">
-					{heroes.map(hero => (
+					{gameHeroes.map(hero => (
 						<HeroCard
 							key={hero.id}
 							hero={hero}
