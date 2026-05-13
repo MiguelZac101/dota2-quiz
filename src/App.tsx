@@ -5,6 +5,7 @@ import type { Hero } from './types/hero'
 import type { Question } from './types/question'
 import { QUESTIONS } from './data/questions'
 import { getRandomElements } from './utils/random'
+import { useSound } from './hook/useSound'
 
 function App() {
 	const [heroes, setHeroes] = useState<Hero[]>(() => {
@@ -28,6 +29,11 @@ function App() {
 	// Estado para mostrar el resultado después de responder (correcto/incorrecto)
 	const [selectedId, setSelectedId] = useState<number | null>(null)
 	const [showResult, setShowResult] = useState(false)
+
+	// Sonidos
+	const { play: playCorrect, stop: stopCorrect } = useSound('/sounds/correct.mp3')
+	const { play: playWrong, stop: stopWrong } = useSound('/sounds/wrong.mp3')
+	const { play: playClick, stop: stopClick } = useSound('/sounds/click.mp3', 0.2) // opcional
 
 
 	// Cargamos los héroes al montar el componente
@@ -85,20 +91,26 @@ function App() {
 	const handleAnswer = (id: number) => {
 		setSelectedId(id) 
 		setShowResult(true) 
+		playClick() // Sonido al clickear
 
-		// Esperas 1s para que vea el resultado y pasas de ronda
-		setTimeout(() => {
-			if (targetHero && id === targetHero.id) {
-				const puntosGanados = 10 * (streak + 1) // Base 10 * multiplicador
-				setScore(prev => prev + puntosGanados)
-				setStreak(prev => prev + 1)
-			} else {
-				setStreak(0) // Reiniciar la racha si se responde incorrectamente
-			}
+		if (targetHero && id === targetHero.id) {
+			playCorrect() // Sonido acierto
+			const puntosGanados = 10 * (streak + 1) // Base 10 * multiplicador
+			setScore(prev => prev + puntosGanados)
+			setStreak(prev => prev + 1)
+		} else {
+			playWrong() // Sonido error
+			setStreak(0) // Reiniciar la racha si se responde incorrectamente
+		}
+
+		// Esperas 1.5s para que vea el resultado y pasas de ronda
+		setTimeout(() => {		
+			stopCorrect()
+  			stopWrong()	
 			setShowResult(false)
 			setSelectedId(null)
 			setRoundsPlayed(prev => prev + 1)
-		}, 500)
+		}, 1500)
 	}
 
 	if (loading) {
