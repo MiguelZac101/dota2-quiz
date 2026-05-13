@@ -38,16 +38,25 @@ function App() {
 	//seleccionar a los heroes que se mostraran en el grid
 	useEffect(() => {
 		if (heroes.length > 0) {
-			//seleccionar la pregunta
-			const selectedQuestion = QUESTIONS[Math.floor(Math.random() * QUESTIONS.length)];
-			setQuestionSelect(selectedQuestion);
+			// 1. Elegir pregunta
+			const selectedQuestion = QUESTIONS[Math.floor(Math.random() * QUESTIONS.length)]
+			setQuestionSelect(selectedQuestion)
 
-			//selecionar a los heroes que responden a la pregunta
-			const filteredHeroes = heroes.filter(selectedQuestion.filter);
-			//seleccionar uno al azar de los heroes que responden a la pregunta
-			const selectHeroe = filteredHeroes[Math.floor(Math.random() * filteredHeroes.length)];
-			//meterlo al grupo que se  mostrara en el grid
-			const newGameHeroes = [selectHeroe];
+			// 2. Separar correctos e incorrectos usando el mismo filter
+			const correctHeroes = heroes.filter(selectedQuestion.filter)
+			const wrongHeroes = heroes.filter(h => !selectedQuestion.filter(h))
+
+			// 3. Validar que haya al menos 1 correcto
+			if (correctHeroes.length === 0) return
+
+			// 4. Agarrar 1 correcto random
+			const oneCorrect = correctHeroes[Math.floor(Math.random() * correctHeroes.length)]
+
+			// 5. Agarrar 8 incorrectos random sin mutar el array original
+			const eightWrong = [...wrongHeroes].sort(() => 0.5 - Math.random()).slice(0, 8)
+
+			// 6. Juntar y desordenar
+			const newGameHeroes = [oneCorrect, ...eightWrong].sort(() => 0.5 - Math.random())
 
 			setGameHeroes(newGameHeroes)
 		}
