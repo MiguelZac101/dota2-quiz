@@ -6,6 +6,7 @@ import type { Question } from './types/question'
 import { QUESTIONS } from './data/questions'
 import { getRandomElements } from './utils/random'
 import { useSound } from './hook/useSound'
+import { motion, type Variants } from 'framer-motion'
 
 function App() {
 	const [heroes, setHeroes] = useState<Hero[]>(() => {
@@ -127,6 +128,27 @@ function App() {
 	
 	}
 
+	// Animaciones con Framer Motion
+	const container = {
+		hidden: { opacity: 0 },
+		show: {
+			opacity: 1,
+			transition: {
+				staggerChildren: 0.05 // 50ms entre cada carta
+			}
+		}
+	}
+
+	const item : Variants = {
+		hidden: { opacity: 0, scale: 0.6, y: 20 },
+		show: {
+			opacity: 1,
+			scale: 1,
+			y: 0,
+			transition: { type: "spring", damping: 15, stiffness: 300 }
+		}
+	}
+
 	if (loading) {
 		return (
 			<div className="min-h-screen bg-gray-900 flex items-center justify-center">
@@ -148,19 +170,33 @@ function App() {
 						{streak > 0 && `Racha: x${streak} 🔥`}
 					</p>
 				</div>
-
-				<div className="grid grid-cols-3 gap-4 mb-8">
-					{gameHeroes.map(hero => (
-						<HeroCard
+				
+				<motion.div
+					key={roundsPlayed} // ← Re-dispara animación cada ronda
+					variants={container}
+					initial="hidden"
+					animate="show"
+					className="grid grid-cols-3 gap-4 mb-8"
+				>
+					{gameHeroes.map((hero) => (
+						<motion.div
 							key={hero.id}
-							hero={hero}
-							onClick={handleAnswer}
-							selectedId={selectedId}
-							correctId={showResult ? (targetHero?.id ?? null) : null}
-							showResult={showResult}
-						/>
+							variants={item}
+							onClick={() => handleAnswer(hero.id)}
+							whileHover={{ scale: 1.05 }}
+							whileTap={{ scale: 0.95 }}														
+						>
+							<HeroCard
+								key={hero.id}
+								hero={hero}
+								onClick={handleAnswer}
+								selectedId={selectedId}
+								correctId={showResult ? (targetHero?.id ?? null) : null}
+								showResult={showResult}
+							/>
+						</motion.div>
 					))}
-				</div>
+				</motion.div>				
 
 				<div className="bg-gray-800 rounded-lg p-6 text-center">
 					<p className="text-xl">
