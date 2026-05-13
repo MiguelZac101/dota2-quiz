@@ -20,6 +20,10 @@ function App() {
 	const [roundsPlayed, setRoundsPlayed] = useState(0)
 	// Estado para guardar el héroe objetivo de la pregunta actual
 	const [targetHero, setTargetHero] = useState<Hero | null>(null)
+	// Estado para llevar el puntaje del jugador
+	const [score, setScore] = useState(0)
+	// Estado para llevar la racha de respuestas correctas del jugador
+	const [streak, setStreak] = useState(0)
 
 
 	// Cargamos los héroes al montar el componente
@@ -75,12 +79,13 @@ function App() {
 	}, [heroes, roundsPlayed])
 
 	const handleAnswer = (id: number) => {
-		// Validamos la respuesta comparando con el héroe objetivo guardado en el estado
-		if (targetHero && id === targetHero.id) {
-			alert('¡Correcto!')
+		if ( targetHero && id === targetHero.id) {
+			const puntosGanados = 10 * (streak + 1) // Base 10 * multiplicador
+			setScore(prev => prev + puntosGanados)
+			setStreak(prev => prev + 1)
 		} else {
-			alert(`Incorrecto. El héroe correcto era ${targetHero?.localized_name}`)
-		}		
+			setStreak(0) // Pierdes el multiplicador
+		}
 		setRoundsPlayed(prev => prev + 1)
 	}
 
@@ -98,6 +103,13 @@ function App() {
 				<h1 className="text-4xl font-bold text-cyan-400 text-center mb-8">
 					Dota Quiz
 				</h1>
+
+				<div className="flex justify-between mb-4">
+					<p className="text-2xl">Puntaje: {score}</p>
+					<p className="text-2xl">
+						{streak > 0 && `Racha: x${streak} 🔥`}
+					</p>
+				</div>
 
 				<div className="grid grid-cols-3 gap-4 mb-8">
 					{gameHeroes.map(hero => (
