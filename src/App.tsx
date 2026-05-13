@@ -4,6 +4,7 @@ import { getHeroes } from './services/heroes'
 import type { Hero } from './types/hero'
 import type { Question } from './types/question'
 import { QUESTIONS } from './data/questions'
+import { getRandomElements } from './utils/random'
 
 function App() {
 	const [heroes, setHeroes] = useState<Hero[]>(() => {
@@ -39,7 +40,7 @@ function App() {
 	useEffect(() => {
 		if (heroes.length > 0) {
 			// 1. Elegir pregunta
-			const selectedQuestion = QUESTIONS[Math.floor(Math.random() * QUESTIONS.length)]
+			const [selectedQuestion] = getRandomElements(QUESTIONS)
 			setQuestionSelect(selectedQuestion)
 
 			// 2. Separar correctos e incorrectos usando el mismo filter
@@ -50,10 +51,10 @@ function App() {
 			if (correctHeroes.length === 0) return
 
 			// 4. Agarrar 1 correcto random
-			const oneCorrect = correctHeroes[Math.floor(Math.random() * correctHeroes.length)]
+			const [oneCorrect] = getRandomElements(correctHeroes)
 
 			// 5. Agarrar 8 incorrectos random sin mutar el array original
-			const eightWrong = [...wrongHeroes].sort(() => 0.5 - Math.random()).slice(0, 8)
+			const eightWrong = getRandomElements(wrongHeroes, 8)
 
 			// 6. Juntar y desordenar
 			const newGameHeroes = [oneCorrect, ...eightWrong].sort(() => 0.5 - Math.random())
