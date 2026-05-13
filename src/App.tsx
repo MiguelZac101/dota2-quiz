@@ -25,6 +25,10 @@ function App() {
 	// Estado para llevar la racha de respuestas correctas del jugador
 	const [streak, setStreak] = useState(0)
 
+	// Estado para mostrar el resultado después de responder (correcto/incorrecto)
+	const [selectedId, setSelectedId] = useState<number | null>(null)
+	const [showResult, setShowResult] = useState(false)
+
 
 	// Cargamos los héroes al montar el componente
 	useEffect(() => {
@@ -79,14 +83,22 @@ function App() {
 	}, [heroes, roundsPlayed])
 
 	const handleAnswer = (id: number) => {
-		if ( targetHero && id === targetHero.id) {
-			const puntosGanados = 10 * (streak + 1) // Base 10 * multiplicador
-			setScore(prev => prev + puntosGanados)
-			setStreak(prev => prev + 1)
-		} else {
-			setStreak(0) // Pierdes el multiplicador
-		}
-		setRoundsPlayed(prev => prev + 1)
+		setSelectedId(id) 
+		setShowResult(true) 
+
+		// Esperas 1s para que vea el resultado y pasas de ronda
+		setTimeout(() => {
+			if (targetHero && id === targetHero.id) {
+				const puntosGanados = 10 * (streak + 1) // Base 10 * multiplicador
+				setScore(prev => prev + puntosGanados)
+				setStreak(prev => prev + 1)
+			} else {
+				setStreak(0) // Reiniciar la racha si se responde incorrectamente
+			}
+			setShowResult(false)
+			setSelectedId(null)
+			setRoundsPlayed(prev => prev + 1)
+		}, 1000)
 	}
 
 	if (loading) {
@@ -117,6 +129,9 @@ function App() {
 							key={hero.id}
 							hero={hero}
 							onClick={handleAnswer}
+							selectedId={selectedId}
+							correctId={showResult ? (targetHero?.id ?? null) : null}
+							showResult={showResult}
 						/>
 					))}
 				</div>
