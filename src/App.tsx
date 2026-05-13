@@ -181,13 +181,11 @@ function App() {
 					{gameHeroes.map((hero) => (
 						<motion.div
 							key={hero.id}
-							variants={item}
-							onClick={() => handleAnswer(hero.id)}
+							variants={item}							
 							whileHover={{ scale: 1.05 }}
 							whileTap={{ scale: 0.95 }}														
 						>
-							<HeroCard
-								key={hero.id}
+							<HeroCard								
 								hero={hero}
 								onClick={handleAnswer}
 								selectedId={selectedId}
