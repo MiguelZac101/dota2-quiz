@@ -1,42 +1,55 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { HeroCard } from './components/HeroCard'
-
-// Data temporal de prueba
-const MOCK_HEROES = [
-	{ id: 1, name: 'Axe', img: 'https://cdn.cloudflare.steamstatic.com/apps/dota2/images/dota_react/heroes/axe.png' },
-	{ id: 2, name: 'Pudge', img: 'https://cdn.cloudflare.steamstatic.com/apps/dota2/images/dota_react/heroes/pudge.png' },
-	{ id: 3, name: 'Invoker', img: 'https://cdn.cloudflare.steamstatic.com/apps/dota2/images/dota_react/heroes/invoker.png' },
-	{ id: 4, name: 'Phantom Assassin', img: 'https://cdn.cloudflare.steamstatic.com/apps/dota2/images/dota_react/heroes/phantom_assassin.png' },
-	{ id: 5, name: 'Crystal Maiden', img: 'https://cdn.cloudflare.steamstatic.com/apps/dota2/images/dota_react/heroes/crystal_maiden.png' },
-	{ id: 6, name: 'Juggernaut', img: 'https://cdn.cloudflare.steamstatic.com/apps/dota2/images/dota_react/heroes/juggernaut.png' },
-	{ id: 7, name: 'Lina', img: 'https://cdn.cloudflare.steamstatic.com/apps/dota2/images/dota_react/heroes/lina.png' },
-	{ id: 8, name: 'Shadow Fiend', img: 'https://cdn.cloudflare.steamstatic.com/apps/dota2/images/dota_react/heroes/nevermore.png' },
-	{ id: 9, name: 'Windranger', img: 'https://cdn.cloudflare.steamstatic.com/apps/dota2/images/dota_react/heroes/windrunner.png' },
-]
+import { getHeroes } from './services/heroes'
+import type { Hero } from './types/hero'
 
 function App() {
-	const [selectedHero, setSelectedHero] = useState<number | null>(null)
+	const [heroes, setHeroes] = useState<Hero[]>([])
+	const [loading, setLoading] = useState(true)
+
+	useEffect(() => {
+		getHeroes()
+			.then(data => {
+				// Por ahora agarra 9 random para la grid 3x3
+				const shuffled = data.sort(() => 0.5 - Math.random())
+				setHeroes(shuffled.slice(0, 9))
+				setLoading(false)
+			})
+			.catch(err => {
+				console.error(err)
+				setLoading(false)
+			})
+	}, [])
 
 	const handleAnswer = (id: number) => {
-		setSelectedHero(id)
 		alert(`Elegiste el héroe con id: ${id}`)
+	}
+
+	if (loading) {
+		return (
+			<div className="min-h-screen bg-gray-900 flex items-center justify-center">
+				<p className="text-white text-xl">Cargando héroes...</p>
+			</div>
+		)
 	}
 
 	return (
 		<div className="min-h-screen bg-gray-900 text-white p-4">
-			<div className="max-w-2xl mx-auto">
+			<div className="max-w-4xl mx-auto">
 				<h1 className="text-4xl font-bold text-cyan-400 text-center mb-8">
-					Dota 2 Quiz
+					Dota Quiz
 				</h1>
 
-				{/* Grid 3x3 */}
 				<div className="grid grid-cols-3 gap-4 mb-8">
-					{MOCK_HEROES.map(hero => (
-						<HeroCard key={hero.id} hero={hero} onClick={handleAnswer} />
+					{heroes.map(hero => (
+						<HeroCard
+							key={hero.id}
+							hero={hero}
+							onClick={handleAnswer}
+						/>
 					))}
 				</div>
 
-				{/* Pregunta debajo */}
 				<div className="bg-gray-800 rounded-lg p-6 text-center">
 					<p className="text-xl">
 						¿Qué héroe tiene la habilidad "Berserker's Call"?

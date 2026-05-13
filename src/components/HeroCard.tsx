@@ -1,8 +1,4 @@
-type Hero = {
-    id: number
-    name: string
-    img: string
-}
+import type { Hero } from '../types/hero'
 
 type Props = {
     hero: Hero
@@ -17,11 +13,11 @@ export function HeroCard({ hero, onClick }: Props) {
         >
             <img
                 src={hero.img}
-                alt={hero.name}
+                alt={hero.localized_name}
                 className="w-full h-full object-cover aspect-square"
             />
             <div className="absolute bottom-0 w-full bg-black/80 text-white text-sm py-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                {hero.name}
+                {hero.localized_name}
             </div>
         </button>
     )
