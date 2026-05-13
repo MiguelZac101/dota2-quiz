@@ -8,10 +8,24 @@ export function useSound(src: string, volume = 0.5) {
         audioRef.current.volume = volume
     }
 
-    const play = useCallback(() => {
-        if (!audioRef.current) return
-        audioRef.current.currentTime = 0
-        audioRef.current.play().catch(() => { })
+    const play = useCallback((durationMs?: number): Promise<void> => {
+        return new Promise((resolve) => {
+            if (!audioRef.current) return resolve()
+
+            audioRef.current.currentTime = 0
+            audioRef.current.play().catch(() => resolve())
+
+            // Si pasas duración, corta ahí
+            if (durationMs) {
+                setTimeout(() => {
+                    audioRef.current?.pause()
+                    resolve()
+                }, durationMs)
+            } else {
+                // Si no, espera a que termine completo
+                audioRef.current.onended = () => resolve()
+            }
+        })
     }, [])
 
     const stop = useCallback(() => {

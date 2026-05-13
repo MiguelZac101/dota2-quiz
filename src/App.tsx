@@ -32,8 +32,7 @@ function App() {
 
 	// Sonidos
 	const { play: playCorrect, stop: stopCorrect } = useSound('/sounds/correct.mp3')
-	const { play: playWrong, stop: stopWrong } = useSound('/sounds/wrong.mp3')
-	const { play: playClick, stop: stopClick } = useSound('/sounds/click.mp3', 0.2) // opcional
+	const { play: playWrong, stop: stopWrong } = useSound('/sounds/wrong.mp3')	
 
 	// Sound Streaks
 	const  { play: playKillingSpree, stop: stopKillingSpree } = useSound('/sounds/streak/killing-spree.mp3')
@@ -99,32 +98,33 @@ function App() {
 		if (streak === 4) return playMegaKill()
 		if (streak >= 5) return playUnstoppable()
 		
-		return playCorrect() // sonido normal
+		return playCorrect(2000) // sonido normal
 	}
 
-	const handleAnswer = (id: number) => {
+	const handleAnswer = async (id: number) => {
 		setSelectedId(id) 
-		setShowResult(true) 
-		playClick() // Sonido al clickear
+		setShowResult(true) 		
+
+		let soundPromise: Promise<void>
 
 		if (targetHero && id === targetHero.id) {
-			getStreakSound(streak+1) // Reproducir sonido de racha
+			soundPromise = getStreakSound(streak+1) // Reproducir sonido de racha
 			const puntosGanados = 10 * (streak + 1) // Base 10 * multiplicador
 			setScore(prev => prev + puntosGanados)
 			setStreak(prev => prev + 1)
 		} else {
-			playWrong() // Sonido error
+			soundPromise = playWrong(2000) // Sonido error
 			setStreak(0) // Reiniciar la racha si se responde incorrectamente
 		}
 
-		// Esperas 1.5s para que vea el resultado y pasas de ronda
-		setTimeout(() => {		
-			stopCorrect()
-  			stopWrong()	
-			setShowResult(false)
-			setSelectedId(null)
-			setRoundsPlayed(prev => prev + 1)
-		}, 1500)
+		// Espera a que termine el sonido
+  		await soundPromise
+
+		// Preparamos la siguiente ronda reseteando estados relacionados a la respuesta y aumentando el contador de rondas para disparar el useEffect de selección de pregunta y héroes		
+		setShowResult(false)
+		setSelectedId(null)
+		setRoundsPlayed(prev => prev + 1)
+	
 	}
 
 	if (loading) {
