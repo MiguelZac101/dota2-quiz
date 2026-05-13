@@ -26,6 +26,7 @@ export function HeroCard({ hero, onClick, selectedId, correctId, showResult }: P
             disabled={showResult}
             className={`
                 relative rounded-lg overflow-hidden transition-all duration-200 border-2 group
+                leading-none p-0 block
                 ${borderClass}
                 ${forceHover ? 'scale-105' : 'hover:scale-105'}
                 ${showResult ? 'cursor-not-allowed' : 'cursor-pointer'}
@@ -34,7 +35,7 @@ export function HeroCard({ hero, onClick, selectedId, correctId, showResult }: P
             <img
                 src={hero.img}
                 alt={hero.localized_name}
-                className="w-full h-full object-cover aspect-square"
+                className="w-full h-full object-cover aspect-square block"
             />
             <div className={`
                 absolute bottom-0 w-full bg-black/80 text-white text-sm py-2 transition-opacity
