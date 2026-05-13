@@ -35,6 +35,11 @@ function App() {
 	const { play: playWrong, stop: stopWrong } = useSound('/sounds/wrong.mp3')
 	const { play: playClick, stop: stopClick } = useSound('/sounds/click.mp3', 0.2) // opcional
 
+	// Sound Streaks
+	const  { play: playKillingSpree, stop: stopKillingSpree } = useSound('/sounds/streak/killing-spree.mp3')
+	const  { play: playDominating, stop: stopDominating } = useSound('/sounds/streak/dominating.mp3')
+	const  { play: playMegaKill, stop: stopMegaKill } = useSound('/sounds/streak/mega-kill.mp3')
+	const  { play: playUnstoppable, stop: stopUnstoppable } = useSound('/sounds/streak/unstoppable.mp3')
 
 	// Cargamos los héroes al montar el componente
 	useEffect(() => {
@@ -88,13 +93,22 @@ function App() {
 		}
 	}, [heroes, roundsPlayed])
 
+	const getStreakSound = (streak: number) => {
+		if (streak === 2) return playKillingSpree()
+		if (streak === 3) return playDominating()
+		if (streak === 4) return playMegaKill()
+		if (streak >= 5) return playUnstoppable()
+		
+		return playCorrect() // sonido normal
+	}
+
 	const handleAnswer = (id: number) => {
 		setSelectedId(id) 
 		setShowResult(true) 
 		playClick() // Sonido al clickear
 
 		if (targetHero && id === targetHero.id) {
-			playCorrect() // Sonido acierto
+			getStreakSound(streak+1) // Reproducir sonido de racha
 			const puntosGanados = 10 * (streak + 1) // Base 10 * multiplicador
 			setScore(prev => prev + puntosGanados)
 			setStreak(prev => prev + 1)
