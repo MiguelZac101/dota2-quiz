@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react'
 import { HeroCard } from './components/HeroCard'
 import { getHeroes } from './services/heroes'
 import type { Hero } from './types/hero'
+import type { Question } from './types/question'
+import { QUESTIONS } from './data/questions'
 
 function App() {
 	const [heroes, setHeroes] = useState<Hero[]>(() => {
@@ -10,6 +12,7 @@ function App() {
 		return storedHeroes ? JSON.parse(storedHeroes) : []
 	})
 	const [loading, setLoading] = useState(true)
+	const [questionSelect, setQuestionSelect] = useState<Question | null>(null)
 
 	// Cargamos los héroes al montar el componente
 	useEffect(() => {
@@ -29,6 +32,17 @@ function App() {
 				console.error(err)
 				setLoading(false)
 			})
+	}, [])
+
+	//seleccionar a los heroes que se mostraran en el grid
+	useEffect(() => {
+		if (heroes.length > 0) {
+			//seleccionar la pregunta
+			const selectedQuestion = QUESTIONS[Math.floor(Math.random() * QUESTIONS.length)];
+			setQuestionSelect(selectedQuestion);
+
+			setHeroes(heroes.slice(0, 9))
+		}
 	}, [])
 
 	const handleAnswer = (id: number) => {
@@ -62,7 +76,7 @@ function App() {
 
 				<div className="bg-gray-800 rounded-lg p-6 text-center">
 					<p className="text-xl">
-						¿Qué héroe tiene la habilidad "Berserker's Call"?
+						{questionSelect?.text}
 					</p>
 				</div>
 			</div>
