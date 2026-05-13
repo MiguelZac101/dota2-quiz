@@ -52,6 +52,7 @@ function App() {
 			// 2. Separar correctos e incorrectos usando el mismo filter
 			const correctHeroes = heroes.filter(selectedQuestion.filter)
 			const wrongHeroes = heroes.filter(h => !selectedQuestion.filter(h))
+			if (wrongHeroes.length < 8) return // Validamos que haya suficientes héroes incorrectos para llenar el grid, si no, no hacemos nada y esperamos a la próxima ronda para intentar con otra pregunta diferente (podría pasar con preguntas muy específicas)
 
 			// 3. Validar que haya al menos 1 correcto
 			if (correctHeroes.length === 0) return
@@ -63,7 +64,7 @@ function App() {
 			const eightWrong = getRandomElements(wrongHeroes, 8)
 
 			// 6. Juntar y desordenar
-			const newGameHeroes = [oneCorrect, ...eightWrong].sort(() => 0.5 - Math.random())
+			const newGameHeroes = getRandomElements([oneCorrect, ...eightWrong], 9)
 
 			// 7. Guardamos el héroe objetivo para poder validar la respuesta del jugador después
 			setTargetHero(oneCorrect);
@@ -71,7 +72,7 @@ function App() {
 			// 8. Actualizamos los nuevos héroes en el grid
 			setGameHeroes(newGameHeroes)
 		}
-	}, [roundsPlayed])
+	}, [heroes, roundsPlayed])
 
 	const handleAnswer = (id: number) => {
 		// Validamos la respuesta comparando con el héroe objetivo guardado en el estado
@@ -93,7 +94,7 @@ function App() {
 
 	return (
 		<div className="min-h-screen bg-gray-900 text-white p-4">
-			<div className="max-w-4xl mx-auto">
+			<div className="max-w-2xl mx-auto">
 				<h1 className="text-4xl font-bold text-cyan-400 text-center mb-8">
 					Dota Quiz
 				</h1>
