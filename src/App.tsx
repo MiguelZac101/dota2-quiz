@@ -158,51 +158,69 @@ function App() {
 	}
 
 	return (
-		<div className="min-h-screen bg-gray-900 text-white p-4">
-			<div className="max-w-2xl mx-auto">
-				<h1 className="text-4xl font-bold text-cyan-400 text-center mb-8">
-					Dota Quiz
-				</h1>
+		<div className="w-full p-2 sm:p-0 bg-gray-900 text-white min-h-screen">
+			
+			{/* LAYOUT DESKTOP: 3 columnas */}
+			<div className="lg:grid lg:grid-cols-3 lg:gap-8 lg:items-start">
 
-				<div className="flex justify-between mb-4">
-					<p className="text-2xl">Puntaje: {score}</p>
-					<p className="text-2xl">
-						{streak > 0 && `Racha: x${streak} 🔥`}
-					</p>
+				{/* COLUMNA IZQ: solo desktop */}
+				<div className="hidden lg:block lg:sticky lg:top-8">
+					
 				</div>
-				
-				<motion.div
-					key={roundsPlayed} // ← Re-dispara animación cada ronda
-					variants={container}
-					initial="hidden"
-					animate="show"
-					className="grid grid-cols-3 gap-4 mb-8"
-				>
-					{gameHeroes.map((hero) => (
-						<motion.div
-							key={hero.id}
-							variants={item}							
-							whileHover={{ scale: 1.05 }}
-							whileTap={{ scale: 0.95 }}														
-						>
-							<HeroCard								
-								hero={hero}
-								onClick={handleAnswer}
-								selectedId={selectedId}
-								correctId={showResult ? (targetHero?.id ?? null) : null}
-								showResult={showResult}
-							/>
-						</motion.div>
-					))}
-				</motion.div>				
 
-				<div className="bg-gray-800 rounded-lg p-6 text-center">
-					<p className="text-xl">
-						{questionSelect?.text}
-					</p>
+				{/* COLUMNA CENTRO: Grid */}
+				<div className="pt-4 lg:pt-8">
+					<h1 className="text-4xl font-bold text-cyan-400 text-center mb-8">
+						Dota 2 Quiz
+					</h1>
+
+					<div className="flex justify-between mb-4">
+						<p className="text-2xl">Puntaje: {score}</p>
+						<p className="text-2xl">
+							{streak > 0 && `Racha: x${streak} 🔥`}
+						</p>
+					</div>
+
+					<motion.div
+						key={roundsPlayed} // ← Re-dispara animación cada ronda
+						variants={container}
+						initial="hidden"
+						animate="show"
+						className="grid grid-cols-3 gap-2 sm:gap-4 mb-8"
+					>
+						{gameHeroes.map((hero) => (
+							<motion.div
+								key={hero.id}
+								variants={item}
+								whileHover={{ scale: 1.05 }}
+								whileTap={{ scale: 0.95 }}
+							>
+								<HeroCard
+									hero={hero}
+									onClick={handleAnswer}
+									selectedId={selectedId}
+									correctId={showResult ? (targetHero?.id ?? null) : null}
+									showResult={showResult}
+								/>
+							</motion.div>
+						))}
+					</motion.div>
+
+					<div className="bg-gray-800 rounded-lg p-6 text-center">
+						<p className="text-xl">
+							{questionSelect?.text}
+						</p>
+					</div>
 				</div>
+
+				{/* COLUMNA DER: solo desktop */}
+				<div className="hidden lg:block lg:sticky lg:top-8 space-y-4">
+					
+				</div>
+
 			</div>
 		</div>
+
 	)
 }
 
