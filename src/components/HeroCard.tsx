@@ -2,7 +2,7 @@ import type { Hero } from '../types/hero'
 
 type Props = {
     hero: Hero
-    onClick: (id: number) => void
+    onClick: (hero: Hero) => void
     selectedId: number | null
     correctId: number | null
     showResult: boolean
@@ -22,7 +22,7 @@ export function HeroCard({ hero, onClick, selectedId, correctId, showResult }: P
 
     return (
         <button
-            onClick={() => !showResult && onClick(hero.id)}
+            onClick={() => !showResult && onClick(hero)}
             disabled={showResult}
             className={`
                 relative rounded-lg overflow-hidden transition-all duration-200 border-2 group

@@ -8,6 +8,7 @@ import { getRandomElements } from './utils/random'
 import { useSound } from './hook/useSound'
 import { motion, type Variants } from 'framer-motion'
 import { Timer } from './components/Timer'
+import { RoundTracker, type RoundStatus } from './components/RoundTracker'
 
 function App() {
 	const [heroes, setHeroes] = useState<Hero[]>(() => {
@@ -43,6 +44,11 @@ function App() {
 	const  { play: playUnstoppable, stop: stopUnstoppable } = useSound('/sounds/streak/unstoppable.mp3')
 	
 	const [timeLeft, setTimeLeft] = useState(10)
+
+	// Estados para el RoundTracker	
+	const [roundResults, setRoundResults] = useState<RoundStatus[]>([])
+	const [roundHeroes, setRoundHeroes] = useState<(Hero | null)[]>([]) // URLs de héroes por ronda
+	const TOTAL_ROUNDS = 7	
 
 	// Cargamos los héroes al montar el componente
 	useEffect(() => {
@@ -105,29 +111,42 @@ function App() {
 		return playCorrect(2000) // sonido normal
 	}
 
-	const handleAnswer = async (id: number) => {
-		setSelectedId(id) 
+	// función que maneje TODOS los cambios de ronda
+	const goToNextRound = () => {
+		setShowResult(false)
+		setSelectedId(null)
+		setRoundsPlayed(p => p + 1) // ← Solo se suma acá
+	}
+
+	const handleAnswer = async (hero: Hero) => {
+		setSelectedId(hero.id) 
 		setShowResult(true) 		
 
 		let soundPromise: Promise<void>
 
-		if (targetHero && id === targetHero.id) {
+		if (targetHero && hero.id === targetHero.id) {
 			soundPromise = getStreakSound(streak+1) // Reproducir sonido de racha
 			const puntosGanados = 10 * (streak + 1) // Base 10 * multiplicador
 			setScore(prev => prev + puntosGanados)
 			setStreak(prev => prev + 1)
+
+			setRoundResults(prev => [...prev, 'correct'])
+			setRoundHeroes(prev => [...prev, hero]) // guarda al héroe
+			
+			// Aquí podrías mostrar un mensaje de "Correcto +20 puntos!" usando otro estado y un componente adicional, y ocultarlo después de 2 segundos
 		} else {
 			soundPromise = playWrong(2000) // Sonido error
 			setStreak(0) // Reiniciar la racha si se responde incorrectamente
+
+			setRoundResults(prev => [...prev, 'wrong'])
+			setRoundHeroes(prev => [...prev, hero]) // guarda al héroe
 		}
 
 		// Espera a que termine el sonido
   		await soundPromise
 
 		// Preparamos la siguiente ronda reseteando estados relacionados a la respuesta y aumentando el contador de rondas para disparar el useEffect de selección de pregunta y héroes		
-		setShowResult(false)
-		setSelectedId(null)
-		setRoundsPlayed(prev => prev + 1)
+		goToNextRound()
 	
 	}
 
@@ -157,19 +176,23 @@ function App() {
 	useEffect(() => {
 		if (showResult) return
 
+		//finish
+		if(roundsPlayed===TOTAL_ROUNDS) return
+
 		setTimeLeft(10)
 		const interval = setInterval(() => {
 			setTimeLeft(prev => {
 				if (prev <= 1) {
 					clearInterval(interval)
 					// Lógica de timeout directo aquí
-					setShowResult(true)
-					//playWrong(2000)
-					//setStreak(0)
+					setShowResult(true)					
+
+					// Para el tracker, consideramos que el timeout es como responder mal, pero sin héroe seleccionado, así que guardamos null
+					setRoundResults(prev => [...prev, 'empty'])
+					setRoundHeroes(prev => [...prev, null]) // guarda null para indicar que no se seleccionó ningún héroe
+
 					setTimeout(() => {
-						setShowResult(false)
-						setSelectedId(null)
-						setRoundsPlayed(p => p + 1)
+						goToNextRound()
 					}, 2000)
 					return 0
 				}
@@ -177,8 +200,10 @@ function App() {
 			})
 		}, 1000)
 
+		
+
 		return () => clearInterval(interval)
-	}, [roundsPlayed, showResult]) // ← Solo estas 2
+	}, [roundsPlayed]) 
 
 
 	if (loading) {
@@ -252,9 +277,14 @@ function App() {
 					</div>
 				</div>
 
-				{/* COLUMNA DER: solo desktop */}
-				<div className="hidden lg:block lg:sticky lg:top-8 space-y-4">
-					
+				{/* COLUMNA DER: solo desktop */}				
+				<div className="hidden lg:block lg:mt-8 lg:mr-8">
+					<RoundTracker
+						currentRound={roundsPlayed + 1}
+						totalRounds={TOTAL_ROUNDS}
+						roundResults={roundResults}
+						roundHeroes={roundHeroes}
+					/>
 				</div>
 
 			</div>
