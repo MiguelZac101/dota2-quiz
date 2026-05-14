@@ -7,6 +7,7 @@ import { QUESTIONS } from './data/questions'
 import { getRandomElements } from './utils/random'
 import { useSound } from './hook/useSound'
 import { motion, type Variants } from 'framer-motion'
+import { Timer } from './components/Timer'
 
 function App() {
 	const [heroes, setHeroes] = useState<Hero[]>(() => {
@@ -40,6 +41,8 @@ function App() {
 	const  { play: playDominating, stop: stopDominating } = useSound('/sounds/streak/dominating.mp3')
 	const  { play: playMegaKill, stop: stopMegaKill } = useSound('/sounds/streak/mega-kill.mp3')
 	const  { play: playUnstoppable, stop: stopUnstoppable } = useSound('/sounds/streak/unstoppable.mp3')
+	
+	const [timeLeft, setTimeLeft] = useState(10)
 
 	// Cargamos los héroes al montar el componente
 	useEffect(() => {
@@ -149,6 +152,35 @@ function App() {
 		}
 	}
 
+
+	// useEffect del timer
+	useEffect(() => {
+		if (showResult) return
+
+		setTimeLeft(10)
+		const interval = setInterval(() => {
+			setTimeLeft(prev => {
+				if (prev <= 1) {
+					clearInterval(interval)
+					// Lógica de timeout directo aquí
+					setShowResult(true)
+					//playWrong(2000)
+					//setStreak(0)
+					setTimeout(() => {
+						setShowResult(false)
+						setSelectedId(null)
+						setRoundsPlayed(p => p + 1)
+					}, 2000)
+					return 0
+				}
+				return prev - 1
+			})
+		}, 1000)
+
+		return () => clearInterval(interval)
+	}, [roundsPlayed, showResult]) // ← Solo estas 2
+
+
 	if (loading) {
 		return (
 			<div className="min-h-screen bg-gray-900 flex items-center justify-center">
@@ -160,12 +192,19 @@ function App() {
 	return (
 		<div className="w-full p-2 sm:p-0 bg-gray-900 text-white min-h-screen">
 			
+			{/* TIMER MÓVIL: Solo se ve < lg */}
+			<div className="lg:hidden">				
+				<Timer timeLeft={timeLeft} variant="bar"/>
+			</div>
+
 			{/* LAYOUT DESKTOP: 3 columnas */}
 			<div className="lg:grid lg:grid-cols-3 lg:gap-8 lg:items-start">
 
 				{/* COLUMNA IZQ: solo desktop */}
-				<div className="hidden lg:block lg:sticky lg:top-8">
+				<div className="hidden lg:grid place-items-center h-screen">
 					
+					<Timer timeLeft={timeLeft} variant="medium"/>
+
 				</div>
 
 				{/* COLUMNA CENTRO: Grid */}
