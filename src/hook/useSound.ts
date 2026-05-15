@@ -1,29 +1,43 @@
-import { useRef, useCallback } from 'react'
+import { useRef, useCallback, useEffect } from 'react'
 
 export function useSound(src: string, volume = 0.5) {
     const audioRef = useRef<HTMLAudioElement | null>(null)
 
-    if (!audioRef.current) {
-        audioRef.current = new Audio(src)
-        audioRef.current.volume = volume
-    }
+    useEffect(() => {
+        const audio = new Audio(src)
+        audio.volume = volume
+        audioRef.current = audio
+
+        return () => {
+            audio.pause()
+            audioRef.current = null
+        }
+    }, [src, volume])
 
     const play = useCallback((durationMs?: number): Promise<void> => {
         return new Promise((resolve) => {
-            if (!audioRef.current) return resolve()
+            const audio = audioRef.current
+            if (!audio) return resolve()
 
-            audioRef.current.currentTime = 0
-            audioRef.current.play().catch(() => resolve())
+            audio.currentTime = 0
 
-            // Si pasas duración, corta ahí
+            let resolved = false
+            const safeResolve = () => {
+                if (!resolved) {
+                    resolved = true  // ← nunca se llama dos veces
+                    resolve()
+                }
+            }
+
+            audio.play().catch(safeResolve)
+
             if (durationMs) {
                 setTimeout(() => {
-                    audioRef.current?.pause()
-                    resolve()
+                    audio.pause()
+                    safeResolve()
                 }, durationMs)
             } else {
-                // Si no, espera a que termine completo
-                audioRef.current.onended = () => resolve()
+                audio.onended = safeResolve
             }
         })
     }, [])
