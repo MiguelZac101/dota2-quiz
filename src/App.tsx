@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { HeroCard } from './components/HeroCard'
 import { getHeroes } from './services/heroes'
 import type { Hero } from './types/hero'
@@ -43,12 +43,19 @@ function App() {
 	const  { play: playMegaKill, stop: stopMegaKill } = useSound('/sounds/streak/mega-kill.mp3')
 	const  { play: playUnstoppable, stop: stopUnstoppable } = useSound('/sounds/streak/unstoppable.mp3')
 	
+	// tiempo del timer
 	const [timeLeft, setTimeLeft] = useState(10)
 
 	// Estados para el RoundTracker	
 	const [roundResults, setRoundResults] = useState<RoundStatus[]>([])
 	const [roundHeroes, setRoundHeroes] = useState<(Hero | null)[]>([]) // URLs de héroes por ronda
 	const TOTAL_ROUNDS = 7	
+
+	// validar round, para que los useEffect solo carguen una vez
+	const roundIdRef = useRef(0)	
+
+	//
+	const [isMobile, setIsMobile] = useState(false)
 
 	// Cargamos los héroes al montar el componente
 	useEffect(() => {
@@ -71,7 +78,7 @@ function App() {
 	}, [])
 
 	//seleccionar a los heroes que se mostraran en el grid
-	useEffect(() => {
+	useEffect(() => {		
 		if (heroes.length > 0) {
 			// 1. Elegir pregunta
 			const [selectedQuestion] = getRandomElements(QUESTIONS)
@@ -119,6 +126,8 @@ function App() {
 	}
 
 	const handleAnswer = async (hero: Hero) => {
+		const thisRoundId = roundIdRef.current // ← captura ID
+
 		setSelectedId(hero.id) 
 		setShowResult(true) 		
 
@@ -130,23 +139,21 @@ function App() {
 			setScore(prev => prev + puntosGanados)
 			setStreak(prev => prev + 1)
 
-			setRoundResults(prev => [...prev, 'correct'])
-			setRoundHeroes(prev => [...prev, hero]) // guarda al héroe
-			
-			// Aquí podrías mostrar un mensaje de "Correcto +20 puntos!" usando otro estado y un componente adicional, y ocultarlo después de 2 segundos
 		} else {
 			soundPromise = playWrong(2000) // Sonido error
 			setStreak(0) // Reiniciar la racha si se responde incorrectamente
-
-			setRoundResults(prev => [...prev, 'wrong'])
-			setRoundHeroes(prev => [...prev, hero]) // guarda al héroe
 		}
+
+		setRoundResults(prev => [...prev, targetHero?.id === hero.id? 'correct' : 'wrong'])
+    	setRoundHeroes(prev => [...prev, hero])
 
 		// Espera a que termine el sonido
   		await soundPromise
-
-		// Preparamos la siguiente ronda reseteando estados relacionados a la respuesta y aumentando el contador de rondas para disparar el useEffect de selección de pregunta y héroes		
-		goToNextRound()
+		
+		// Solo pasa de ronda si no cambió
+		if (thisRoundId === roundIdRef.current) {
+			goToNextRound()
+		}		
 	
 	}
 
@@ -170,41 +177,53 @@ function App() {
 			transition: { type: "spring", damping: 15, stiffness: 300 }
 		}
 	}
-
-
+	
 	// useEffect del timer
 	useEffect(() => {
-		if (showResult) return
+		if (roundsPlayed + 1 >= TOTAL_ROUNDS) return
 
-		//finish
-		if(roundsPlayed===TOTAL_ROUNDS) return
+		roundIdRef.current += 1
+		const currentRoundId = roundIdRef.current
 
 		setTimeLeft(10)
+		setShowResult(false)
+		setSelectedId(null)
+
+		let expired = false  // flag local, no depende de refs ni closures
+
 		const interval = setInterval(() => {
 			setTimeLeft(prev => {
 				if (prev <= 1) {
 					clearInterval(interval)
-					// Lógica de timeout directo aquí
-					setShowResult(true)					
 
-					// Para el tracker, consideramos que el timeout es como responder mal, pero sin héroe seleccionado, así que guardamos null
-					setRoundResults(prev => [...prev, 'empty'])
-					setRoundHeroes(prev => [...prev, null]) // guarda null para indicar que no se seleccionó ningún héroe
+					if (!expired && currentRoundId === roundIdRef.current) {
+						expired = true  // evita doble ejecución
+						setShowResult(true)
+						setRoundResults(p => [...p, 'empty'])
+						setRoundHeroes(p => [...p, null])
+						setRoundsPlayed(p => p + 1)  // ← directo, sin goToNextRound
+					}
 
-					setTimeout(() => {
-						goToNextRound()
-					}, 2000)
 					return 0
 				}
 				return prev - 1
 			})
 		}, 1000)
 
-		
+		return () => {
+			clearInterval(interval)
+			expired = true  // ← si cleanup corre (StrictMode), marca como expirado
+		}
 
-		return () => clearInterval(interval)
-	}, [roundsPlayed]) 
+	}, [roundsPlayed])
 
+	// isMobile : saber si la vista en movil
+	useEffect(() => {
+		const checkMobile = () => setIsMobile(window.innerWidth < 1024)
+		checkMobile()
+		window.addEventListener('resize', checkMobile)
+		return () => window.removeEventListener('resize', checkMobile)
+	}, [])
 
 	if (loading) {
 		return (
@@ -219,7 +238,7 @@ function App() {
 			
 			{/* TIMER MÓVIL: Solo se ve < lg */}
 			<div className="lg:hidden">				
-				<Timer timeLeft={timeLeft} variant="bar"/>
+				{isMobile && <Timer timeLeft={timeLeft} variant="bar"/>}				
 			</div>
 
 			{/* LAYOUT DESKTOP: 3 columnas */}
@@ -228,7 +247,7 @@ function App() {
 				{/* COLUMNA IZQ: solo desktop */}
 				<div className="hidden lg:grid place-items-center h-screen">
 					
-					<Timer timeLeft={timeLeft} variant="medium"/>
+					{!isMobile && <Timer timeLeft={timeLeft} variant="medium"/>}					
 
 				</div>
 
