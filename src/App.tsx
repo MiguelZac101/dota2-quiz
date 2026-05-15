@@ -54,6 +54,12 @@ function App() {
 	// validar round, para que los useEffect solo carguen una vez
 	const roundIdRef = useRef(0)	
 
+	// Indicador para pusar el Timer
+	const [isPaused,setIsPaused] = useState(false);
+
+	// referencia para setInterval
+	const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
+
 	// Cargamos los héroes al montar el componente
 	useEffect(() => {
 		// Si ya tenemos héroes en el estado (cargados desde localStorage), no hacemos la llamada a la API
@@ -186,21 +192,21 @@ function App() {
 		setShowResult(false)
 		setSelectedId(null)
 
-		let expired = false  // flag local, no depende de refs ni closures
+		let expired = false
 
-		const interval = setInterval(() => {
+		intervalRef.current = setInterval(() => {
 			setTimeLeft(prev => {
 				if (prev <= 1) {
-					clearInterval(interval)
+					clearInterval(intervalRef.current!)
+					intervalRef.current = null
 
 					if (!expired && currentRoundId === roundIdRef.current) {
-						expired = true  // evita doble ejecución
+						expired = true
 						setShowResult(true)
 						setRoundResults(p => [...p, 'empty'])
 						setRoundHeroes(p => [...p, null])
-						setRoundsPlayed(p => p + 1)  // ← directo, sin goToNextRound
+						goToNextRound()
 					}
-
 					return 0
 				}
 				return prev - 1
@@ -208,11 +214,39 @@ function App() {
 		}, 1000)
 
 		return () => {
-			clearInterval(interval)
-			expired = true  // ← si cleanup corre (StrictMode), marca como expirado
+			clearInterval(intervalRef.current!)
+			intervalRef.current = null
+			expired = true
 		}
 
 	}, [roundsPlayed])
+
+	//para pausar
+	useEffect(() => {
+		if (isPaused) {
+			// Pausar: matar el interval
+			clearInterval(intervalRef.current!)
+			intervalRef.current = null
+		} else {
+			// Reanudar: pero solo si no hay uno corriendo ya
+			if (intervalRef.current) return			
+
+			intervalRef.current = setInterval(() => {
+				setTimeLeft(prev => {
+					if (prev <= 1) {
+						clearInterval(intervalRef.current!)
+						intervalRef.current = null
+						setShowResult(true)
+						setRoundResults(p => [...p, 'empty'])
+						setRoundHeroes(p => [...p, null])
+						goToNextRound()
+						return 0
+					}
+					return prev - 1
+				})
+			}, 1000)
+		}
+	}, [isPaused])
 
 	if (loading) {
 		return (
@@ -231,7 +265,7 @@ function App() {
 				{/* COLUMNA IZQ: solo desktop */}
 				<div className="lg:grid lg:place-items-center lg:h-screen">
 					
-					<Timer timeLeft={timeLeft} />
+					<Timer timeLeft={timeLeft} isPaused={isPaused} onClick={() => setIsPaused(prev => !prev)} />
 
 				</div>
 
