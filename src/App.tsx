@@ -54,9 +54,6 @@ function App() {
 	// validar round, para que los useEffect solo carguen una vez
 	const roundIdRef = useRef(0)	
 
-	//
-	const [isMobile, setIsMobile] = useState(false)
-
 	// Cargamos los héroes al montar el componente
 	useEffect(() => {
 		// Si ya tenemos héroes en el estado (cargados desde localStorage), no hacemos la llamada a la API
@@ -217,14 +214,6 @@ function App() {
 
 	}, [roundsPlayed])
 
-	// isMobile : saber si la vista en movil
-	useEffect(() => {
-		const checkMobile = () => setIsMobile(window.innerWidth < 1024)
-		checkMobile()
-		window.addEventListener('resize', checkMobile)
-		return () => window.removeEventListener('resize', checkMobile)
-	}, [])
-
 	if (loading) {
 		return (
 			<div className="min-h-screen bg-gray-900 flex items-center justify-center">
@@ -236,18 +225,13 @@ function App() {
 	return (
 		<div className="w-full p-2 sm:p-0 bg-gray-900 text-white min-h-screen">
 			
-			{/* TIMER MÓVIL: Solo se ve < lg */}
-			<div className="lg:hidden">				
-				{isMobile && <Timer timeLeft={timeLeft} variant="bar"/>}				
-			</div>
-
 			{/* LAYOUT DESKTOP: 3 columnas */}
 			<div className="lg:grid lg:grid-cols-3 lg:gap-8 lg:items-start">
 
 				{/* COLUMNA IZQ: solo desktop */}
-				<div className="hidden lg:grid place-items-center h-screen">
+				<div className="lg:grid lg:place-items-center lg:h-screen">
 					
-					{!isMobile && <Timer timeLeft={timeLeft} variant="medium"/>}					
+					<Timer timeLeft={timeLeft} />
 
 				</div>
 

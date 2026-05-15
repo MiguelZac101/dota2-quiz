@@ -1,104 +1,44 @@
-type TimerVariant = 'xs' | 'small' | 'medium' | 'large' | 'bar'
-
 type TimerProps = {
     timeLeft: number
-    variant?: TimerVariant // default 'large'
 }
 
-export const Timer = ({ timeLeft, variant = 'large' }: TimerProps) => {
-
+export const Timer = ({ timeLeft }: TimerProps) => {
     const progress = (timeLeft / 10) * 100
+    const isLow = timeLeft <= 3
 
-    // Si es barra, return temprano
-    if (variant === 'bar') {
-        return (
-            <div className="fixed top-0 left-0 w-full h-1 bg-gray-800 z-50">
+    return (
+        <>
+            {/* Barra: solo móvil */}
+            <div className="fixed top-0 left-0 w-full h-1 bg-gray-800 z-50 lg:hidden">
                 <div
-                    className={`h-full transition-all duration-1000 linear ${timeLeft > 3 ? 'bg-green-500' : 'bg-red-500'
-                        }`}
+                    className={`h-full transition-all duration-1000 linear ${isLow ? 'bg-red-500' : 'bg-green-500'}`}
                     style={{ width: `${progress}%` }}
                 />
             </div>
-        )
-    }
 
-    const config = {
-        xs: {
-            size: 'w-8 h-8', // 32px
-            center: 16,
-            radius: 14,
-            strokeWidth: 3,
-            text: 'text-xs',
-            showNumber: true // si quieres ocultarlo pon false
-        },
-        small: {
-            size: 'w-16 h-16', // 64px
-            center: 32,
-            radius: 28,
-            strokeWidth: 4,
-            text: 'text-xl',
-            showNumber: true
-        },
-        medium: {
-            size: 'w-32 h-32', // 128px
-            center: 64,
-            radius: 56,
-            strokeWidth: 8,
-            text: 'text-4xl',
-            showNumber: true
-        },
-        large: {
-            size: 'w-64 h-64', // 256px
-            center: 128,
-            radius: 120,
-            strokeWidth: 12,
-            text: 'text-7xl',
-            showNumber: true
-        }
-    }[variant]
-
-    const { size, center, radius, strokeWidth, text, showNumber } = config
-
-    return (
-        <div className="flex flex-col items-center">
-            <div className={`relative ${size} mx-auto`}>
-                <svg className={`transform -rotate-90 ${size}`}>
-                    <circle
-                        cx={center}
-                        cy={center}
-                        r={radius}
-                        stroke="#374151"
-                        strokeWidth={strokeWidth}
-                        fill="transparent"
-                    />
-                    <circle
-                        cx={center}
-                        cy={center}
-                        r={radius}
-                        stroke={timeLeft > 3 ? "#22c55e" : "#ef4444"}
-                        strokeWidth={strokeWidth}
-                        fill="transparent"
-                        strokeDasharray={2 * Math.PI * radius}
-                        strokeDashoffset={(1 - timeLeft / 10) * 2 * Math.PI * radius}
-                        className="transition-all duration-1000 linear"
-                        strokeLinecap="round"
-                    />
-                </svg>
-
-                {/* Número: se oculta si showNumber = false */}
-                {showNumber && (
+            {/* Círculo: solo desktop */}
+            <div className="hidden lg:flex flex-col items-center">
+                <div className="relative w-32 h-32">
+                    <svg className="transform -rotate-90 w-32 h-32">
+                        <circle cx={64} cy={64} r={56} stroke="#374151" strokeWidth={8} fill="transparent" />
+                        <circle
+                            cx={64} cy={64} r={56}
+                            stroke={isLow ? "#ef4444" : "#22c55e"}
+                            strokeWidth={8}
+                            fill="transparent"
+                            strokeDasharray={2 * Math.PI * 56}
+                            strokeDashoffset={(1 - timeLeft / 10) * 2 * Math.PI * 56}
+                            className="transition-all duration-1000 linear"
+                            strokeLinecap="round"
+                        />
+                    </svg>
                     <div className="absolute inset-0 flex items-center justify-center">
-                        <span className={`${text} font-bold ${timeLeft > 3 ? 'text-green-400' : 'text-red-500'
-                            }`}>
+                        <span className={`text-4xl font-bold ${isLow ? 'text-red-500' : 'text-green-400'}`}>
                             {timeLeft}
                         </span>
                     </div>
-                )}
+                </div>
             </div>
-
-            {variant === 'large' && (
-                <p className="text-gray-400 text-lg mt-2">segundos</p>
-            )}
-        </div>
+        </>
     )
 }
