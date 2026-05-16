@@ -9,7 +9,13 @@ type ModalProps = {
 export const Modal = ({ openModal, onSave, onCancel }: ModalProps) => {
     const [name, setName] = useState('')
 
-    if(!openModal) return
+    if(!openModal) return null
+
+    const handleKeyDown = (e : React.KeyboardEvent<HTMLInputElement>) =>{
+        if(e.key === "Enter"){
+            onSave(name)
+        }
+    }    
 
     return (                
         <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
@@ -20,6 +26,7 @@ export const Modal = ({ openModal, onSave, onCancel }: ModalProps) => {
                     type="text"
                     value={name}
                     onChange={e => setName(e.target.value)}
+                    onKeyDown={ handleKeyDown}
                     placeholder="Tu nombre..."
                     className="bg-gray-700 text-white rounded-lg px-4 py-3 outline-none focus:ring-2 focus:ring-cyan-400"
                 />
