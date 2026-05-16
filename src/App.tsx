@@ -122,10 +122,15 @@ function App() {
 	}
 
 	// función que maneje TODOS los cambios de ronda
-	const goToNextRound = () => {
-		setShowResult(false)
-		setSelectedId(null)
-		setRoundsPlayed(p => p + 1) // ← Solo se suma acá
+	const goToNextRound = () => {		
+
+		//solo pasa de ronda hasta que llegue al TOTAL_ROUNDS
+		if( roundsPlayed + 1 < TOTAL_ROUNDS){
+			setShowResult(false)
+			setSelectedId(null)
+			setRoundsPlayed(p => p + 1) 
+		}
+		
 	}
 
 	const handleAnswer = async (hero: Hero) => {
@@ -183,7 +188,6 @@ function App() {
 	
 	// useEffect del timer
 	useEffect(() => {
-		if (roundsPlayed + 1 >= TOTAL_ROUNDS) return
 
 		roundIdRef.current += 1
 		const currentRoundId = roundIdRef.current
