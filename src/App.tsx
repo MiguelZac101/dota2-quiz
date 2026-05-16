@@ -194,9 +194,9 @@ function App() {
 		})
 
 		//para mostrar modal antes de que termine el sonido
-		// if(roundsPlayed+1 == TOTAL_ROUNDS){
-		// 	setGameOver(true)			
-		// } 
+		if(roundsPlayed+1 == TOTAL_ROUNDS){
+			setGameOver(true)			
+		} 
 
 		// Espera a que termine el sonido
   		await soundPromise
