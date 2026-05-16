@@ -398,11 +398,25 @@ function App() {
 						))}
 					</motion.div>
 
-					<div className="bg-gray-800 rounded-lg p-6 text-center">
+					<motion.div
+						className="bg-gray-800 rounded-lg p-6 text-center"
+						animate={{
+							boxShadow: [
+								'0 0 0px #22d3ee',
+								'0 0 20px #22d3ee',
+								'0 0 0px #22d3ee'
+							]
+						}}
+						transition={{ duration: 1.5, repeat: Infinity, repeatDelay: 3 }}
+					>
+
 						<p className="text-xl">
 							{questionSelect?.text}
 						</p>
-					</div>
+
+					</motion.div>
+
+					
 					
 				</div>
 
