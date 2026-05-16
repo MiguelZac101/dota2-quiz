@@ -10,6 +10,7 @@ import { motion, type Variants } from 'framer-motion'
 import { Timer } from './components/Timer'
 import { RoundTracker, type RoundStatus } from './components/RoundTracker'
 import { RestartButton } from './components/RestartButton'
+import { Modal } from './components/Modal'
 
 function App() {
 	const [heroes, setHeroes] = useState<Hero[]>(() => {
@@ -60,6 +61,10 @@ function App() {
 
 	// referencia para setInterval
 	const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
+
+	// control modal
+	const [showModal, setShowModal] = useState(false)
+	const [playerName, setPlayerName] = useState('')
 
 	// Cargamos los héroes al montar el componente
 	useEffect(() => {
@@ -263,6 +268,13 @@ function App() {
 		setIsPaused(false) // si estaba pausado al reiniciar
 	}
 
+	//abrir modal
+	useEffect(()=>{
+		if(roundsPlayed+1 == TOTAL_ROUNDS && timeLeft == 0){
+			setShowModal(true);
+		}
+	},[roundsPlayed])
+
 	if (loading) {
 		return (
 			<div className="min-h-screen bg-gray-900 flex items-center justify-center">
@@ -344,7 +356,20 @@ function App() {
 				</div>
 
 			</div>
-		</div>
+			
+			<Modal
+				openModal={showModal}
+				onSave={(name) => {
+					setPlayerName(name)
+					setShowModal(false)
+				}}
+				onCancel={() => setShowModal(false)}
+			/>
+			
+
+
+
+		</div>		
 
 	)
 }
