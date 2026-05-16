@@ -335,7 +335,7 @@ function App() {
 		if (!gameOver) return
 		const timeout = setTimeout(() => {
 			setShowRestartHint(true)
-		}, 1000)
+		}, 5000)
 		return () => clearTimeout(timeout)
 	}, [gameOver])
 
