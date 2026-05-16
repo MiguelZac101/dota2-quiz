@@ -11,6 +11,7 @@ import { Timer } from './components/Timer'
 import { RoundTracker, type RoundStatus } from './components/RoundTracker'
 import { RestartButton } from './components/RestartButton'
 import { Modal } from './components/Modal'
+import { Ranking, type RankingType } from './components/Ranking'
 
 function App() {
 	const [heroes, setHeroes] = useState<Hero[]>(() => {
@@ -46,12 +47,13 @@ function App() {
 	const  { play: playUnstoppable, stop: stopUnstoppable } = useSound('/sounds/streak/unstoppable.mp3')
 	
 	// tiempo del timer
-	const [timeLeft, setTimeLeft] = useState(10)
+	const TIME_ROUND = 3 // DEFAULT 10
+	const [timeLeft, setTimeLeft] = useState(TIME_ROUND)
 
 	// Estados para el RoundTracker	
 	const [roundResults, setRoundResults] = useState<RoundStatus[]>([])
 	const [roundHeroes, setRoundHeroes] = useState<(Hero | null)[]>([]) // URLs de héroes por ronda
-	const TOTAL_ROUNDS = 7	
+	const TOTAL_ROUNDS = 2	//DEFAULT 7
 
 	// validar round, para que los useEffect solo carguen una vez
 	const roundIdRef = useRef(0)	
@@ -65,6 +67,13 @@ function App() {
 	// control modal
 	const [showModal, setShowModal] = useState(false)
 	const [playerName, setPlayerName] = useState('')
+	const [saveTriggered, setSaveTriggered] = useState(0)
+
+	// ranking	
+	const [ranking,setRanking] = useState<RankingType[]>([])
+
+	//control termino de juego
+	const [gameOver,setGameOver] = useState(false)
 
 	// Cargamos los héroes al montar el componente
 	useEffect(() => {
@@ -135,6 +144,9 @@ function App() {
 			setShowResult(false)
 			setSelectedId(null)
 			setRoundsPlayed(p => p + 1) 
+		}else{
+			//juego terminado
+			setGameOver(true)
 		}
 		
 	}
@@ -143,7 +155,8 @@ function App() {
 		const thisRoundId = roundIdRef.current // ← captura ID
 
 		setSelectedId(hero.id) 
-		setShowResult(true) 		
+		setShowResult(true) 
+		setTimeLeft(0)		
 
 		let soundPromise: Promise<void>
 
@@ -160,6 +173,11 @@ function App() {
 
 		setRoundResults(prev => [...prev, targetHero?.id === hero.id? 'correct' : 'wrong'])
     	setRoundHeroes(prev => [...prev, hero])
+
+		//para mostrar modal antes de que termine el sonido
+		if(roundsPlayed+1 == TOTAL_ROUNDS){
+			setGameOver(true)			
+		} 
 
 		// Espera a que termine el sonido
   		await soundPromise
@@ -266,14 +284,27 @@ function App() {
 		setScore(0)      // puntaje
 		setStreak(0)     // racha
 		setIsPaused(false) // si estaba pausado al reiniciar
+		setGameOver(false)
 	}
 
 	//abrir modal
 	useEffect(()=>{
-		if(roundsPlayed+1 == TOTAL_ROUNDS && timeLeft == 0){
+		if(gameOver){
 			setShowModal(true);
 		}
-	},[roundsPlayed])
+	},[gameOver])
+
+	//agregar jugador al listado de ranking
+	useEffect(()=>{
+		if (!playerName) return  // evita agregar si está vacío
+		const newRank:RankingType = {
+			id: crypto.randomUUID(),
+			name: playerName,
+			points: score
+		}
+		setRanking( prev => [ ...prev, newRank] )
+
+	},[saveTriggered])
 
 	if (loading) {
 		return (
@@ -353,6 +384,8 @@ function App() {
 						roundResults={roundResults}
 						roundHeroes={roundHeroes}
 					/>
+
+					<Ranking ranking={ranking} />
 				</div>
 
 			</div>
@@ -362,6 +395,7 @@ function App() {
 				onSave={(name) => {
 					setPlayerName(name)
 					setShowModal(false)
+					setSaveTriggered( prev => prev + 1 )
 				}}
 				onCancel={() => setShowModal(false)}
 			/>
