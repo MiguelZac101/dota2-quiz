@@ -84,6 +84,9 @@ function App() {
 	//pintar fila jugador en ranking si acaba de guardar
 	const [isTickRowPlayerRanking,setIsTickRowPlayerRanking] = useState(false)
 
+	//mostrar tooltip al lado del btn reiniciar en movil
+	const [showRestartHint, setShowRestartHint] = useState(false)
+
 	// Cargamos los héroes al montar el componente
 	useEffect(() => {
 		// Si ya tenemos héroes en el estado (cargados desde localStorage), no hacemos la llamada a la API
@@ -291,6 +294,7 @@ function App() {
 
 	//reiniciar juego
 	const onRestart = () => {
+		setShowRestartHint(false)// ocultar tooltip movil
 		setRoundsPlayed(0); // ronda a cero
 		setRoundResults([]); // lista de estados ( correct, wrong , empty) de heroes marcados
 		setRoundHeroes([]); // lista de heroes marcados se vacia
@@ -326,6 +330,15 @@ function App() {
 
 	},[saveTriggered])
 
+	//mostrar tooltil al lado del btn reiniciar en movil
+	useEffect(() => {
+		if (!gameOver) return
+		const timeout = setTimeout(() => {
+			setShowRestartHint(true)
+		}, 1000)
+		return () => clearTimeout(timeout)
+	}, [gameOver])
+
 	if (loading) {
 		return (
 			<div className="min-h-screen bg-gray-900 flex items-center justify-center">
@@ -346,7 +359,7 @@ function App() {
 						<Timer timeLeft={timeLeft} isPaused={isPaused} onClick={() => setIsPaused(prev => !prev)} />
 					</div>
 					<div className="flex items-center justify-center h-1/2">
-						<RestartButton onClick={onRestart} />
+						<RestartButton onClick={onRestart} showHint={showRestartHint}/>
 					</div>
 				</div>
 

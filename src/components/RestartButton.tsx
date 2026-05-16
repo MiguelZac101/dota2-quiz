@@ -29,6 +29,7 @@ const configs = {
 
 type RestartButtonProps = {
     onClick: () => void
+    showHint?: boolean
 }
 
 const RestartIcon = ({ size, color = 'white' }: { size: number, color?: string }) => (
@@ -58,12 +59,24 @@ const Circle = ({ variant }: { variant: Variant }) => {
     )
 }
 
-export const RestartButton = ({ onClick }: RestartButtonProps) => {
+export const RestartButton = ({ onClick , showHint = false }: RestartButtonProps) => {
     return (
         <div onClick={onClick}>
             {/* Móvil */}
             <div className="lg:hidden fixed left-4 top-4">
                 <Circle variant="small" />
+                {/* Tooltip nube */}
+                {showHint && (
+                    <div className="absolute left-0 top-12 bg-white text-gray-900 text-xs font-medium px-3 py-2 rounded-lg shadow-lg w-32 z-50">
+                        {/* Flecha apuntando hacia arriba */}
+                        <div className="absolute -top-2 left-3 w-0 h-0 
+                            border-l-4 border-l-transparent 
+                            border-r-4 border-r-transparent 
+                            border-b-8 border-b-white">
+                        </div>
+                        ¡Aquí puedes reiniciar el juego!
+                    </div>
+                )}
             </div>
             {/* Desktop */}
             <div className="hidden lg:block">
