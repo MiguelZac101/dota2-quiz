@@ -1,4 +1,3 @@
-import { useState } from "react"
 
 export type RankingType = {
     id:string
@@ -8,10 +7,11 @@ export type RankingType = {
 
 type RankingProps = {
     ranking: RankingType[]
+    isOpen: boolean
+    setIsOpen: (value:boolean) => void
 }
 
-export const Ranking = ({ ranking }: RankingProps) => {
-    const [isOpen, setIsOpen] = useState(false)
+export const Ranking = ({ ranking, isOpen, setIsOpen }: RankingProps) => {    
     const sorted = [...ranking].sort((a, b) => b.points - a.points)
 
     const list = (

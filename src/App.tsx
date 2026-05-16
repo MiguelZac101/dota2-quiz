@@ -79,6 +79,9 @@ function App() {
 	//control termino de juego
 	const [gameOver,setGameOver] = useState(false)
 
+	//controlar apertura del ranking en movil
+	const [isRankingMovilOpen,setIsRankingMovilOpen] = useState(false)
+
 	// Cargamos los héroes al montar el componente
 	useEffect(() => {
 		// Si ya tenemos héroes en el estado (cargados desde localStorage), no hacemos la llamada a la API
@@ -326,6 +329,9 @@ function App() {
 		setRanking(updatedRanking)
 		localStorage.setItem('ranking', JSON.stringify(updatedRanking)) 
 
+		//abrir ranking
+
+
 	},[saveTriggered])
 
 	if (loading) {
@@ -419,11 +425,9 @@ function App() {
 							roundHeroes={roundHeroes}
 							variant="desktop"
 						/>
-					</div>					
+					</div>			
 					
-					
-					<Ranking ranking={ranking} />
-					
+					<Ranking ranking={ranking} isOpen={isRankingMovilOpen} setIsOpen={setIsRankingMovilOpen} />					
 					
 				</div>
 
@@ -435,6 +439,7 @@ function App() {
 					setPlayerName(name)
 					setShowModal(false)
 					setSaveTriggered( prev => prev + 1 )
+					setIsRankingMovilOpen(true) //abrir ranking
 				}}
 				onCancel={() => setShowModal(false)}
 			/>
