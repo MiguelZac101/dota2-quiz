@@ -44,9 +44,11 @@ export const RoundTracker = ({
     }
 
     return (
+        <>
+        <h2 className="text-2xl font-bold mb-4 text-center">Ronda</h2>
+        
         <div className="bg-gray-800 rounded-lg p-4 w-full">
-            <div className="text-center mb-4">
-                <p className="text-gray-400 text-sm">Ronda</p>
+            <div className="text-center mb-4">                
                 <p className="text-3xl font-bold text-white">
                     {currentRound} <span className="text-gray-500">/ {totalRounds}</span>
                 </p>
@@ -109,5 +111,6 @@ export const RoundTracker = ({
                 })}
             </div>
         </div>
+        </>
     )
 }
