@@ -9,9 +9,14 @@ type RankingProps = {
     ranking: RankingType[]
     isOpen: boolean
     setIsOpen: (value:boolean) => void
+    tickRow: boolean
+    setTickRow: (value:boolean) => void
 }
 
-export const Ranking = ({ ranking, isOpen, setIsOpen }: RankingProps) => {    
+export const Ranking = ({ ranking, isOpen, setIsOpen , tickRow, setTickRow }: RankingProps) => {   
+    
+    const lastPlayer = ranking.at(-1)// último agregado
+    
     const sorted = [...ranking].sort((a, b) => b.points - a.points)
 
     const list = (
@@ -20,8 +25,9 @@ export const Ranking = ({ ranking, isOpen, setIsOpen }: RankingProps) => {
             {sorted.length === 0 && (
                 <p className="text-gray-400 text-center">No hay entradas aún</p>
             )}
-            {sorted.map((entry, index) => (
-                <div key={entry.id} className="flex items-center justify-between bg-gray-700 rounded-lg px-4 py-3">
+            
+            {sorted.map((entry, index) => (                
+                <div key={entry.id} className={`flex items-center justify-between ${(entry.id === lastPlayer?.id && tickRow )? 'bg-green-700' : 'bg-gray-700'} rounded-lg px-4 py-3`}>                    
                     <div className="flex items-center gap-3">
                         <span className="text-lg w-6 text-center">
                             {index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : `${index + 1}.`}
@@ -54,7 +60,11 @@ export const Ranking = ({ ranking, isOpen, setIsOpen }: RankingProps) => {
                 <div className="fixed inset-0 bg-black/60 z-50 lg:hidden flex items-start justify-center pt-4 px-4">
                     <div className="bg-gray-800 rounded-xl p-6 w-full relative">
                         <button
-                            onClick={() => setIsOpen(false)}
+                            onClick={() => {
+                                    setIsOpen(false)
+                                    setTickRow(false)
+                                }
+                            }
                             className="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors"
                         >
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} width={24} height={24}>

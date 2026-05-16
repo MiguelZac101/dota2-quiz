@@ -81,6 +81,8 @@ function App() {
 
 	//controlar apertura del ranking en movil
 	const [isRankingMovilOpen,setIsRankingMovilOpen] = useState(false)
+	//pintar fila jugador en ranking si acaba de guardar
+	const [isTickRowPlayerRanking,setIsTickRowPlayerRanking] = useState(false)
 
 	// Cargamos los héroes al montar el componente
 	useEffect(() => {
@@ -307,6 +309,7 @@ function App() {
 		setStreak(0)     // racha
 		setIsPaused(false) // si estaba pausado al reiniciar
 		setGameOver(false)
+		setIsTickRowPlayerRanking(false) //despintar fila
 	}
 
 	//abrir modal
@@ -329,8 +332,8 @@ function App() {
 		setRanking(updatedRanking)
 		localStorage.setItem('ranking', JSON.stringify(updatedRanking)) 
 
-		//abrir ranking
-
+		// marcar fila del jugador agregado
+		setIsTickRowPlayerRanking(true)
 
 	},[saveTriggered])
 
@@ -427,7 +430,13 @@ function App() {
 						/>
 					</div>			
 					
-					<Ranking ranking={ranking} isOpen={isRankingMovilOpen} setIsOpen={setIsRankingMovilOpen} />					
+					<Ranking 
+						ranking={ranking} 
+						isOpen={isRankingMovilOpen} 
+						setIsOpen={setIsRankingMovilOpen} 
+						tickRow={isTickRowPlayerRanking}
+						setTickRow={setIsTickRowPlayerRanking}
+					/>					
 					
 				</div>
 
