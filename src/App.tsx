@@ -355,6 +355,7 @@ function App() {
 
 				{/* COLUMNA IZQ: solo desktop */}
 				<div className="lg:flex lg:flex-col lg:h-screen">
+
 					<div className="flex items-center justify-center h-1/2">
 						<Timer timeLeft={timeLeft} isPaused={isPaused} onClick={() => setIsPaused(prev => !prev)} />
 					</div>
@@ -369,11 +370,29 @@ function App() {
 						Dota 2 Quiz
 					</h1>
 
-					<div className="flex justify-between m-0 p-0 lg:mb-4">
-						<p className="lg:text-2xl">Puntaje: {score}</p>
-						<p className="lg:text-2xl">
-							{streak > 0 && `Racha: x${streak} 🔥`}
-						</p>
+					{/* Puntaje y racha */}					
+					<div className="grid grid-cols-3 items-stretch gap-4 lg:mb-8">
+
+						{/* Puntaje texto */}
+						<div className="flex items-center justify-center border-r border-gray-700 pr-4">
+							<p className="text-gray-400 text-sm uppercase tracking-widest">Puntaje</p>
+						</div>
+
+						{/* Puntaje número */}
+						<div className="flex items-center justify-center">
+							<p className="text-white font-bold text-6xl tabular-nums">
+								{String(score).padStart(2, '0')}
+							</p>
+						</div>
+
+						{/* Racha */}
+						<div className="flex items-center justify-center border-l border-gray-700 pl-4">
+							{streak > 0
+								? <p className="text-orange-400 text-xl font-bold">x{streak} 🔥</p>
+								: <p className="text-gray-600 text-xl">—</p>
+							}
+						</div>
+
 					</div>
 
 					<div className="lg:hidden mb-2 lg:mb-0">
