@@ -62,7 +62,7 @@ export const RestartButton = ({ onClick }: RestartButtonProps) => {
     return (
         <div onClick={onClick}>
             {/* Móvil */}
-            <div className="lg:hidden fixed left-1">
+            <div className="lg:hidden fixed left-4 top-4">
                 <Circle variant="small" />
             </div>
             {/* Desktop */}
