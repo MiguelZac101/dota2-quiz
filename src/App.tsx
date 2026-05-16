@@ -343,11 +343,21 @@ function App() {
 						Dota 2 Quiz
 					</h1>
 
-					<div className="flex justify-between mb-4">
+					<div className="flex justify-between lg:mb-4">
 						<p className="text-2xl">Puntaje: {score}</p>
 						<p className="text-2xl">
 							{streak > 0 && `Racha: x${streak} 🔥`}
 						</p>
+					</div>
+
+					<div className="lg:hidden mb-1 lg:mb-0">
+						<RoundTracker
+							currentRound={roundsPlayed + 1}
+							totalRounds={TOTAL_ROUNDS}
+							roundResults={roundResults}
+							roundHeroes={roundHeroes}
+							variant="mobile"
+						/>
 					</div>
 
 					<motion.div
@@ -386,12 +396,13 @@ function App() {
 				{/* COLUMNA DER: solo desktop */}				
 				<div className="lg:block lg:mt-8 lg:mr-8">
 
-					<div className='hidden lg:block'>
+					<div className='hidden lg:block'>						
 						<RoundTracker
 							currentRound={roundsPlayed + 1}
 							totalRounds={TOTAL_ROUNDS}
 							roundResults={roundResults}
 							roundHeroes={roundHeroes}
+							variant="desktop"
 						/>
 					</div>					
 					
