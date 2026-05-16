@@ -9,6 +9,7 @@ import { useSound } from './hook/useSound'
 import { motion, type Variants } from 'framer-motion'
 import { Timer } from './components/Timer'
 import { RoundTracker, type RoundStatus } from './components/RoundTracker'
+import { RestartButton } from './components/RestartButton'
 
 function App() {
 	const [heroes, setHeroes] = useState<Hero[]>(() => {
@@ -252,6 +253,16 @@ function App() {
 		}
 	}, [isPaused])
 
+	//reiniciar juego
+	const onRestart = () => {
+		setRoundsPlayed(0); // ronda a cero
+		setRoundResults([]); // lista de estados ( correct, wrong , empty) de heroes marcados
+		setRoundHeroes([]); // lista de heroes marcados se vacia
+		setScore(0)      // puntaje
+		setStreak(0)     // racha
+		setIsPaused(false) // si estaba pausado al reiniciar
+	}
+
 	if (loading) {
 		return (
 			<div className="min-h-screen bg-gray-900 flex items-center justify-center">
@@ -267,10 +278,13 @@ function App() {
 			<div className="lg:grid lg:grid-cols-3 lg:gap-8 lg:items-start">
 
 				{/* COLUMNA IZQ: solo desktop */}
-				<div className="lg:grid lg:place-items-center lg:h-screen">
-					
-					<Timer timeLeft={timeLeft} isPaused={isPaused} onClick={() => setIsPaused(prev => !prev)} />
-
+				<div className="lg:flex lg:flex-col lg:h-screen">
+					<div className="flex items-center justify-center h-1/2">
+						<Timer timeLeft={timeLeft} isPaused={isPaused} onClick={() => setIsPaused(prev => !prev)} />
+					</div>
+					<div className="flex items-center justify-center h-1/2">
+						<RestartButton onClick={onRestart} />
+					</div>
 				</div>
 
 				{/* COLUMNA CENTRO: Grid */}
@@ -316,6 +330,7 @@ function App() {
 							{questionSelect?.text}
 						</p>
 					</div>
+					
 				</div>
 
 				{/* COLUMNA DER: solo desktop */}				
