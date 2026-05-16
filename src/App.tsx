@@ -70,7 +70,11 @@ function App() {
 	const [saveTriggered, setSaveTriggered] = useState(0)
 
 	// ranking	
-	const [ranking,setRanking] = useState<RankingType[]>([])
+	const [ranking,setRanking] = useState<RankingType[]>(() => {
+		// Intentamos cargar el ranking desde localStorage
+		const ranking = localStorage.getItem('ranking')
+		return ranking ? JSON.parse(ranking) : []
+	})
 
 	//control termino de juego
 	const [gameOver,setGameOver] = useState(false)
@@ -302,7 +306,10 @@ function App() {
 			name: playerName,
 			points: score
 		}
-		setRanking( prev => [ ...prev, newRank] )
+
+		const updatedRanking = [...ranking, newRank]  
+		setRanking(updatedRanking)
+		localStorage.setItem('ranking', JSON.stringify(updatedRanking)) 
 
 	},[saveTriggered])
 
