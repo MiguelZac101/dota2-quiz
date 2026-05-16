@@ -37,14 +37,14 @@ function App() {
 	const [showResult, setShowResult] = useState(false)
 
 	// Sonidos
-	const { play: playCorrect, stop: stopCorrect } = useSound('/sounds/correct.mp3')
-	const { play: playWrong, stop: stopWrong } = useSound('/sounds/wrong.mp3')	
+	const { play: playCorrect } = useSound('/sounds/correct.mp3')
+	const { play: playWrong } = useSound('/sounds/wrong.mp3')	
 
 	// Sound Streaks
-	const  { play: playKillingSpree, stop: stopKillingSpree } = useSound('/sounds/streak/killing-spree.mp3')
-	const  { play: playDominating, stop: stopDominating } = useSound('/sounds/streak/dominating.mp3')
-	const  { play: playMegaKill, stop: stopMegaKill } = useSound('/sounds/streak/mega-kill.mp3')
-	const  { play: playUnstoppable, stop: stopUnstoppable } = useSound('/sounds/streak/unstoppable.mp3')
+	const  { play: playKillingSpree } = useSound('/sounds/streak/killing-spree.mp3')
+	const  { play: playDominating } = useSound('/sounds/streak/dominating.mp3')
+	const  { play: playMegaKill } = useSound('/sounds/streak/mega-kill.mp3')
+	const  { play: playUnstoppable } = useSound('/sounds/streak/unstoppable.mp3')
 	
 	// tiempo del timer
 	const TIME_ROUND = 3 // DEFAULT 10
@@ -184,19 +184,8 @@ function App() {
 			setStreak(0) // Reiniciar la racha si se responde incorrectamente
 		}
 
-		// setRoundResults(prev => [...prev, targetHero?.id === hero.id? 'correct' : 'wrong'])
-    	// setRoundHeroes(prev => [...prev, hero])
-
-		setRoundResults(prev => {
-			const updated: RoundStatus[] = [...prev, targetHero?.id === hero.id ? 'correct' : 'wrong']
-			console.log('roundResults:', updated)
-			return updated
-		})
-		setRoundHeroes(prev => {
-			const updated = [...prev, hero]
-			console.log('roundHeroes:', updated)  // ← cuántos hay?
-			return updated
-		})
+		setRoundResults(prev => [...prev, targetHero?.id === hero.id? 'correct' : 'wrong'])
+    	setRoundHeroes(prev => [...prev, hero])
 
 		//para mostrar modal antes de que termine el sonido
 		if(roundsPlayed+1 == TOTAL_ROUNDS){
