@@ -158,6 +158,10 @@ function App() {
 	const handleAnswer = async (hero: Hero) => {
 		const thisRoundId = roundIdRef.current // ← captura ID
 
+		// Cancela el timer apenas responde
+		clearInterval(intervalRef.current!)
+		intervalRef.current = null
+
 		setSelectedId(hero.id) 
 		setShowResult(true) 
 		setTimeLeft(0)		
@@ -175,13 +179,24 @@ function App() {
 			setStreak(0) // Reiniciar la racha si se responde incorrectamente
 		}
 
-		setRoundResults(prev => [...prev, targetHero?.id === hero.id? 'correct' : 'wrong'])
-    	setRoundHeroes(prev => [...prev, hero])
+		// setRoundResults(prev => [...prev, targetHero?.id === hero.id? 'correct' : 'wrong'])
+    	// setRoundHeroes(prev => [...prev, hero])
+
+		setRoundResults(prev => {
+			const updated: RoundStatus[] = [...prev, targetHero?.id === hero.id ? 'correct' : 'wrong']
+			console.log('roundResults:', updated)
+			return updated
+		})
+		setRoundHeroes(prev => {
+			const updated = [...prev, hero]
+			console.log('roundHeroes:', updated)  // ← cuántos hay?
+			return updated
+		})
 
 		//para mostrar modal antes de que termine el sonido
-		if(roundsPlayed+1 == TOTAL_ROUNDS){
-			setGameOver(true)			
-		} 
+		// if(roundsPlayed+1 == TOTAL_ROUNDS){
+		// 	setGameOver(true)			
+		// } 
 
 		// Espera a que termine el sonido
   		await soundPromise
@@ -339,18 +354,18 @@ function App() {
 
 				{/* COLUMNA CENTRO: Grid */}
 				<div className="pt-4 lg:pt-8">
-					<h1 className="text-4xl font-bold text-cyan-400 text-center mb-8">
+					<h1 className="text-4xl font-bold text-cyan-400 text-center mb-4 lg:mb-8">
 						Dota 2 Quiz
 					</h1>
 
-					<div className="flex justify-between lg:mb-4">
-						<p className="text-2xl">Puntaje: {score}</p>
-						<p className="text-2xl">
+					<div className="flex justify-between m-0 p-0 lg:mb-4">
+						<p className="lg:text-2xl">Puntaje: {score}</p>
+						<p className="lg:text-2xl">
 							{streak > 0 && `Racha: x${streak} 🔥`}
 						</p>
 					</div>
 
-					<div className="lg:hidden mb-1 lg:mb-0">
+					<div className="lg:hidden mb-2 lg:mb-0">
 						<RoundTracker
 							currentRound={roundsPlayed + 1}
 							totalRounds={TOTAL_ROUNDS}
@@ -398,7 +413,7 @@ function App() {
 
 					<div className='hidden lg:block'>						
 						<RoundTracker
-							currentRound={roundsPlayed + 1}
+							currentRound={roundsPlayed + 1 }
 							totalRounds={TOTAL_ROUNDS}
 							roundResults={roundResults}
 							roundHeroes={roundHeroes}

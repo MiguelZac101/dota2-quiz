@@ -56,15 +56,18 @@ export const RoundTracker = ({
                 {Array.from({ length: totalRounds }).map((_, i) => {
                     const status = roundResults[i] || 'empty'
                     const heroImg = roundHeroes[i]?.img || null
+                    const isCurrent = i + 1 === currentRound
+                    const hasResult = roundResults[i] !== undefined  // ← nuevo
 
                     return (
                         <div
                             key={i}
-                            className={`flex-1 aspect-square relative flex items-center justify-center
+                            className={
+                                `flex-1 aspect-square relative flex items-center justify-center
                                 ${status === 'correct' && 'bg-green-500/20'}
                                 ${status === 'wrong' && 'bg-red-500/20'}
                                 ${status === 'empty' && 'bg-gray-900'}
-                                ${i + 1 === currentRound && 'ring-2 ring-yellow-400 ring-inset'}
+                                ${isCurrent && !hasResult && 'ring-2 ring-yellow-400 ring-inset'}  // ← solo si no tiene resultado
                             `}
                         >
                             {heroImg && status !== 'empty' ? (
