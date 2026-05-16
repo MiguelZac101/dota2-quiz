@@ -34,14 +34,30 @@ function App() {
 			<div className="lg:grid lg:grid-cols-3 lg:gap-8 lg:items-start">
 
 				{/* COLUMNA IZQ: solo desktop */}
-				<div className="lg:flex lg:flex-col lg:h-screen">
+				<div>
+					{/* timer / restart */}					
+					<div className="lg:mt-[103px]">						
+						{/* Header Timer / Restart */}
+						<div className="hidden lg:grid grid-cols-2 items-stretch gap-4 lg:mb-8">
+							<div className="flex items-center justify-center border-r border-gray-700 pr-4 py-5">
+								<p className="text-gray-400 text-sm uppercase tracking-widest">Timer</p>
+							</div>
+							<div className="flex items-center justify-center pl-4 py-5">
+								<p className="text-gray-400 text-sm uppercase tracking-widest">Restart</p>
+							</div>
+						</div>
 
-					<div className="flex items-center justify-center h-1/2">
-						<Timer timeLeft={timer.timeLeft} isPaused={timer.isPaused} onClick={() => timer.setIsPaused(prev => !prev)} />
+						{/* Contenido Timer / Restart */}
+						<div className="grid grid-cols-2 items-stretch gap-4 lg:mb-8">
+							<div className="flex items-center justify-center  pr-4">
+								<Timer timeLeft={timer.timeLeft} isPaused={timer.isPaused} onClick={() => timer.setIsPaused(prev => !prev)} />
+							</div>
+							<div className="flex items-center justify-center pl-4">
+								<RestartButton onClick={actions.onRestart} showHint={game.showRestartHint} />
+							</div>
+						</div>
 					</div>
-					<div className="flex items-center justify-center h-1/2">
-						<RestartButton onClick={actions.onRestart} showHint={game.showRestartHint}/>
-					</div>
+					
 				</div>
 
 				{/* COLUMNA CENTRO: Grid */}
