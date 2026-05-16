@@ -384,15 +384,21 @@ function App() {
 				</div>
 
 				{/* COLUMNA DER: solo desktop */}				
-				<div className="hidden lg:block lg:mt-8 lg:mr-8">
-					<RoundTracker
-						currentRound={roundsPlayed + 1}
-						totalRounds={TOTAL_ROUNDS}
-						roundResults={roundResults}
-						roundHeroes={roundHeroes}
-					/>
+				<div className="lg:block lg:mt-8 lg:mr-8">
 
+					<div className='hidden lg:block'>
+						<RoundTracker
+							currentRound={roundsPlayed + 1}
+							totalRounds={TOTAL_ROUNDS}
+							roundResults={roundResults}
+							roundHeroes={roundHeroes}
+						/>
+					</div>					
+					
+					
 					<Ranking ranking={ranking} />
+					
+					
 				</div>
 
 			</div>
