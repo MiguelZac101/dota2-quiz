@@ -48,26 +48,26 @@ function App() {
 					<div className="lg:mt-[103px]">						
 						{/* Header Timer / Restart */}
 						<div className="hidden lg:grid grid-cols-3 items-stretch gap-4 lg:mb-8">
-							<div className="flex items-center justify-center border-r border-gray-700 pr-4 py-5">
+							<div className="flex items-center justify-center border-r border-gray-700 p-5">
 								<p className="text-gray-400 text-sm uppercase tracking-widest">Timer</p>
 							</div>
-							<div className="flex items-center justify-center border-r border-gray-700 pl-4 py-5">
+							<div className="flex items-center justify-center border-r border-gray-700 p-5">
 								<p className="text-gray-400 text-sm uppercase tracking-widest">Restart</p>
 							</div>
-							<div className="flex items-center justify-center pl-4 py-5">
+							<div className="flex items-center justify-center p-5">
 								<p className="text-gray-400 text-sm uppercase tracking-widest">Round</p>
 							</div>
 						</div>
 
 						{/* Contenido Timer / Restart */}
 						<div className="grid grid-cols-3 items-stretch gap-4 lg:mb-8">
-							<div className="flex items-center justify-center  pr-4">
+							<div className="flex items-center justify-center">
 								<Timer timeLeft={timer.timeLeft} isPaused={timer.isPaused} onClick={() => timer.setIsPaused(prev => !prev)} />
 							</div>
-							<div className="flex items-center justify-center pl-4">
+							<div className="flex items-center justify-center">
 								<RestartButton onClick={actions.onRestart} showHint={game.showRestartHint} />
 							</div>
-							<div className="hidden lg:flex items-center justify-center pl-4">
+							<div className="hidden lg:flex items-center justify-center">
 								<p className="text-white font-bold text-6xl tabular-nums">
 									{game.roundsPlayed + 1}<span className="text-gray-500 text-2xl">/ {game.total_rounds}</span>
 								</p>								
