@@ -20,24 +20,32 @@ export const Ranking = ({ ranking, isOpen, setIsOpen , tickRow, setTickRow }: Ra
     const sorted = [...ranking].sort((a, b) => b.points - a.points)
 
     const list = (
-        <div className="flex flex-col gap-2">
-            <h2 className="text-white text-2xl font-bold text-center mb-4">Ranking</h2>
-            {sorted.length === 0 && (
-                <p className="text-gray-400 text-center">No hay entradas aún</p>
-            )}
-            
-            {sorted.map((entry, index) => (                
-                <div key={entry.id} className={`flex items-center justify-between ${(entry.id === lastPlayer?.id && tickRow )? 'bg-green-700' : 'bg-gray-700'} rounded-lg px-4 py-3`}>                    
-                    <div className="flex items-center gap-3">
-                        <span className="text-lg w-6 text-center">
-                            {index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : `${index + 1}.`}
-                        </span>
-                        <span className="text-white font-medium">{entry.name}</span>
+        <>
+            <h2 className="block lg:hidden text-white text-2xl font-bold text-center mb-4">Ranking</h2>
+
+            <div className="hidden lg:flex items-center justify-center p-5 lg:mb-8">
+                <p className="text-gray-400 text-sm uppercase tracking-widest">Ranking</p>
+            </div>
+
+            <div className="flex flex-col gap-2">
+
+                {sorted.length === 0 && (
+                    <p className="text-gray-400 text-center">No hay entradas aún</p>
+                )}
+
+                {sorted.map((entry, index) => (
+                    <div key={entry.id} className={`flex items-center justify-between ${(entry.id === lastPlayer?.id && tickRow) ? 'bg-gray-800' : 'bg-gray-700'} rounded-lg px-4 py-3`}>
+                        <div className="flex items-center gap-3">
+                            <span className="text-lg w-6 text-center">
+                                {index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : `${index + 1}.`}
+                            </span>
+                            <span className="text-white font-medium">{entry.name}</span>
+                        </div>
+                        <span className="text-cyan-400 font-bold">{entry.points} pts</span>
                     </div>
-                    <span className="text-cyan-400 font-bold">{entry.points} pts</span>
-                </div>
-            ))}
-        </div>
+                ))}
+            </div>
+        </>
     )
 
     return (
@@ -58,7 +66,7 @@ export const Ranking = ({ ranking, isOpen, setIsOpen , tickRow, setTickRow }: Ra
             {/* Panel: solo móvil */}
             {isOpen && (
                 <div className="fixed inset-0 bg-black/60 z-50 lg:hidden flex items-start justify-center pt-4 px-4">
-                    <div className="bg-gray-800 rounded-xl p-6 w-full relative">
+                    <div className="bg-gray-800 rounded-xl  p-4 lg:p-6 w-full relative">
                         <button
                             onClick={() => {
                                     setIsOpen(false)
@@ -77,7 +85,7 @@ export const Ranking = ({ ranking, isOpen, setIsOpen , tickRow, setTickRow }: Ra
             )}
 
             {/* Listado directo: solo desktop */}
-            <div className="hidden lg:block lg:mt-8">
+            <div className="hidden lg:block">
                 {list}
             </div>
         </>

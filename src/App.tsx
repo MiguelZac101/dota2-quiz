@@ -166,7 +166,7 @@ function App() {
 				</div>
 
 				{/* COLUMNA DER: solo desktop */}				
-				<div className="lg:block lg:mt-8 lg:mr-8">
+				<div className="lg:block lg:mt-[103px] lg:mr-8">
 					
 					<Ranking 
 						ranking={ranking.ranking} 
