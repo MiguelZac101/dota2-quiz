@@ -43,13 +43,13 @@ export const useGame = () => {
     const { play: playUnstoppable } = useSound('/sounds/streak/unstoppable.mp3')
 
     // tiempo del timer
-    const TIME_ROUND = 3 // DEFAULT 10
+    const TIME_ROUND = Number(import.meta.env.VITE_TIME_ROUND) || 10
     const [timeLeft, setTimeLeft] = useState(TIME_ROUND)
 
     // Estados para el RoundTracker	
     const [roundResults, setRoundResults] = useState<RoundStatus[]>([])
     const [roundHeroes, setRoundHeroes] = useState<(Hero | null)[]>([]) // URLs de héroes por ronda
-    const TOTAL_ROUNDS = 2	//DEFAULT 7
+    const TOTAL_ROUNDS = Number(import.meta.env.VITE_TOTAL_ROUNDS) || 10
 
     // validar round, para que los useEffect solo carguen una vez
     const roundIdRef = useRef(0)
@@ -228,7 +228,7 @@ export const useGame = () => {
         roundIdRef.current += 1
         const currentRoundId = roundIdRef.current
 
-        setTimeLeft(10)
+        setTimeLeft(TIME_ROUND)
         setShowResult(false)
         setSelectedId(null)
 
