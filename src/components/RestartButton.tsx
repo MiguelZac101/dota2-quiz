@@ -1,85 +1,50 @@
-type Variant = 'small' | 'medium' | 'large'
+type Variant = 'small' | 'large'
 
 const configs = {
     small: {
-        container: 'w-10 h-10',
-        svg: 'w-10 h-10',
-        cx: 20, cy: 20, r: 17,
-        strokeWidth: 3,
-        iconSize: 14,
-        hoverContainer: 'w-7 h-7',
-    },
-    medium: {
-        container: 'w-16 h-16',
-        svg: 'w-16 h-16',
-        cx: 32, cy: 32, r: 28,
-        strokeWidth: 4,
-        iconSize: 22,
-        hoverContainer: 'w-10 h-10',
+        container: 'w-6 h-6',
+        svg: 'w-6 h-6',        
+        strokeWidth: 1.5,             
     },
     large: {
-        container: 'w-24 h-24',
-        svg: 'w-24 h-24',
-        cx: 48, cy: 48, r: 42,
-        strokeWidth: 6,
-        iconSize: 30,
-        hoverContainer: 'w-14 h-14',
-    },
+        container: 'w-12 h-12',
+        svg: 'w-12 h-12',        
+        strokeWidth: 1.5,             
+    }    
 }
 
 type RestartButtonProps = {
-    onClick: () => void
-    showHint?: boolean
+    onClick: () => void    
 }
 
-const RestartIcon = ({ size, color = 'white' }: { size: number, color?: string }) => (
-    <svg viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth={2} width={size} height={size}>
-        <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
-        <path d="M3 3v5h5" />
-    </svg>
-)
 
 const Circle = ({ variant }: { variant: Variant }) => {
     const c = configs[variant]
     return (
-        <div className={`relative ${c.container} cursor-pointer group`}>
-            <svg className={`transform -rotate-90 ${c.svg}`}>
-                <circle cx={c.cx} cy={c.cy} r={c.r} stroke="#374151" strokeWidth={c.strokeWidth} fill="transparent" />
-                <circle cx={c.cx} cy={c.cy} r={c.r} stroke="#6366f1" strokeWidth={c.strokeWidth} fill="transparent" />
-            </svg>
+        <div className={`relative ${c.container} cursor-pointer group`}>            
             <div className="absolute inset-0 flex items-center justify-center">
-                <span className="group-hover:hidden flex items-center justify-center">
-                    <RestartIcon size={c.iconSize} />
-                </span>
-                <span className={`hidden group-hover:flex items-center justify-center bg-gray-900 rounded-full ${c.hoverContainer}`}>
-                    <RestartIcon size={c.iconSize} color="#6366f1" />
-                </span>
+                <span className="flex items-center justify-center">
+
+                    <svg className={c.svg} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={c.strokeWidth}>
+                        <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+                        <path d="M3 3v5h5" />
+                    </svg>
+                    
+                </span>                
             </div>
         </div>
     )
 }
 
-export const RestartButton = ({ onClick , showHint = false }: RestartButtonProps) => {
+export const RestartButton = ({ onClick }: RestartButtonProps) => {
     return (
-        <div onClick={onClick}>
+        <div onClick={onClick} title="Reiniciar">
             {/* Móvil */}
             <div className="lg:hidden fixed left-4 top-4">
-                <Circle variant="small" />
-                {/* Tooltip nube */}
-                {showHint && (
-                    <div className="absolute left-0 top-12 bg-white text-gray-900 text-xs font-medium px-3 py-2 rounded-lg shadow-lg w-32 z-50">
-                        {/* Flecha apuntando hacia arriba */}
-                        <div className="absolute -top-2 left-3 w-0 h-0 
-                            border-l-4 border-l-transparent 
-                            border-r-4 border-r-transparent 
-                            border-b-8 border-b-white">
-                        </div>
-                        ¡Aquí puedes reiniciar el juego!
-                    </div>
-                )}
+                <Circle variant="small" />                
             </div>
-            {/* Desktop */}
-            <div className="hidden lg:block">
+            {/* large */}
+            <div className="hidden md:block">
                 <Circle variant="large" />
             </div>
         </div>

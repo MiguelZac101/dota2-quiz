@@ -80,9 +80,6 @@ export const useGame = () => {
     //pintar fila jugador en ranking si acaba de guardar
     const [isTickRowPlayerRanking, setIsTickRowPlayerRanking] = useState(false)
 
-    //mostrar tooltip al lado del btn reiniciar en movil
-    const [showRestartHint, setShowRestartHint] = useState(false)
-
     // Cargamos los héroes al montar el componente
     useEffect(() => {
         // Si ya tenemos héroes en el estado (cargados desde localStorage), no hacemos la llamada a la API
@@ -289,8 +286,7 @@ export const useGame = () => {
     }, [isPaused])
 
     //reiniciar juego
-    const onRestart = () => {
-        setShowRestartHint(false)// ocultar tooltip movil
+    const onRestart = () => {        
         setRoundsPlayed(0); // ronda a cero
         setRoundResults([]); // lista de estados ( correct, wrong , empty) de heroes marcados
         setRoundHeroes([]); // lista de heroes marcados se vacia
@@ -326,17 +322,8 @@ export const useGame = () => {
 
     }, [saveTriggered])
 
-    //mostrar tooltil al lado del btn reiniciar en movil
-    useEffect(() => {
-        if (!gameOver) return
-        const timeout = setTimeout(() => {
-            setShowRestartHint(true)
-        }, 5000)
-        return () => clearTimeout(timeout)
-    }, [gameOver])
-
     return {    
-        game: { score, streak, roundsPlayed, loading ,showRestartHint, total_rounds : TOTAL_ROUNDS },
+        game: { score, streak, roundsPlayed, loading, total_rounds : TOTAL_ROUNDS },
         timer: { timeLeft, isPaused, setIsPaused },
         round: {             
             roundResults, 

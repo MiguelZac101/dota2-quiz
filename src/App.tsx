@@ -50,9 +50,9 @@ function App() {
 						<div className="">
 							<Timer timeLeft={timer.timeLeft} isPaused={timer.isPaused} onClick={() => timer.setIsPaused(prev => !prev)} />
 						</div>
-						<div className="">
-							<RestartButton onClick={actions.onRestart} showHint={game.showRestartHint} />
-						</div>
+						
+							<RestartButton onClick={actions.onRestart} />
+						
 					</div>
 				</div>
 
