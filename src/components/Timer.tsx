@@ -15,7 +15,10 @@ export const Timer = ({ timeLeft }: TimerProps) => {
                     style={{ width: `${progress}%` }}
                 />
             </div>
-            
+            {/* Counter: solo desktop */}
+            <div className={`hidden lg:block fixed top-4 right-4 ${isLow ? 'bg-red-900' : 'bg-gray-800'}  rounded-lg px-3 py-1 z-50`}>
+                <p className="text-9xl font-bold">{timeLeft}</p>
+            </div>
         </>
     )
 }
