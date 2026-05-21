@@ -6,6 +6,7 @@ import { RestartButton } from './components/RestartButton'
 import { Modal } from './components/Modal'
 import { Ranking } from './components/Ranking'
 import { useGame } from './hook/useGame'
+import { PlayStopButton } from './components/PlayStopButton'
 
 function App() {
 	
@@ -46,12 +47,11 @@ function App() {
 				
 				<div className="lg:mt-[196px]">
 					{/* Contenido Timer / Restart */}
-					<div className="flex flex-col items-end gap-2">
-						<div className="">
-							<Timer timeLeft={timer.timeLeft} isPaused={timer.isPaused} onClick={() => timer.setIsPaused(prev => !prev)} />
-						</div>
-						
-							<RestartButton onClick={actions.onRestart} />
+					<div className="flex flex-col items-end gap-0 lg:gap-4">						
+
+						<Timer timeLeft={timer.timeLeft} />
+						<PlayStopButton isPaused={timer.isPaused} onClick={() => timer.setIsPaused(prev => !prev)} />
+						<RestartButton onClick={actions.onRestart} />
 						
 					</div>
 				</div>

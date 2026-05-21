@@ -55,7 +55,7 @@ export const useGame = () => {
     const roundIdRef = useRef(0)
 
     // Indicador para pusar el Timer
-    const [isPaused, setIsPaused] = useState(false);
+    const [isPaused, setIsPaused] = useState(true);
 
     // referencia para setInterval
     const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
