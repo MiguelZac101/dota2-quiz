@@ -42,39 +42,18 @@ function App() {
 			{/* LAYOUT DESKTOP: 3 columnas */}
 			<div className="lg:grid lg:grid-cols-3 lg:gap-8 lg:items-start">
 
-				{/* COLUMNA IZQ: solo desktop */}
-				<div>
-					{/* timer / restart */}					
-					<div className="lg:mt-[103px]">						
-						{/* Header Timer / Restart */}
-						<div className="hidden lg:grid grid-cols-3 items-stretch gap-4 lg:mb-8">
-							<div className="flex items-center justify-center border-r border-gray-700 p-5">
-								<p className="text-gray-400 text-sm uppercase tracking-widest">Timer</p>
-							</div>
-							<div className="flex items-center justify-center border-r border-gray-700 p-5">
-								<p className="text-gray-400 text-sm uppercase tracking-widest">Restart</p>
-							</div>
-							<div className="flex items-center justify-center p-5">
-								<p className="text-gray-400 text-sm uppercase tracking-widest">Round</p>
-							</div>
+				{/* COLUMNA IZQ: solo desktop */}				
+				
+				<div className="lg:mt-[196px]">
+					{/* Contenido Timer / Restart */}
+					<div className="flex flex-col items-end gap-2">
+						<div className="">
+							<Timer timeLeft={timer.timeLeft} isPaused={timer.isPaused} onClick={() => timer.setIsPaused(prev => !prev)} />
 						</div>
-
-						{/* Contenido Timer / Restart */}
-						<div className="grid grid-cols-3 items-stretch gap-4 lg:mb-8">
-							<div className="flex items-center justify-center">
-								<Timer timeLeft={timer.timeLeft} isPaused={timer.isPaused} onClick={() => timer.setIsPaused(prev => !prev)} />
-							</div>
-							<div className="flex items-center justify-center">
-								<RestartButton onClick={actions.onRestart} showHint={game.showRestartHint} />
-							</div>
-							<div className="hidden lg:flex items-center justify-center">
-								<p className="text-white font-bold text-6xl tabular-nums">
-									{game.roundsPlayed + 1}<span className="text-gray-500 text-2xl">/ {game.total_rounds}</span>
-								</p>								
-							</div>
+						<div className="">
+							<RestartButton onClick={actions.onRestart} showHint={game.showRestartHint} />
 						</div>
 					</div>
-					
 				</div>
 
 				{/* COLUMNA CENTRO: Grid */}
