@@ -143,7 +143,6 @@ export const useGame = () => {
 
     // función que maneje TODOS los cambios de ronda
     const goToNextRound = () => {
-
         //solo pasa de ronda hasta que llegue al TOTAL_ROUNDS
         if (roundsPlayed + 1 < TOTAL_ROUNDS) {
             setShowResult(false)

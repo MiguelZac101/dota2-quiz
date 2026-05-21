@@ -9,7 +9,7 @@ const configs = {
     large: {
         container: 'w-12 h-12',
         svg: 'w-12 h-12',        
-        strokeWidth: 1.5,             
+        strokeWidth: 2,             
     }    
 }
 
