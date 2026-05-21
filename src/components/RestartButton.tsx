@@ -40,7 +40,7 @@ export const RestartButton = ({ onClick }: RestartButtonProps) => {
     return (
         <div onClick={onClick} title="Reiniciar">
             {/* Móvil */}
-            <div className="lg:hidden fixed left-11 top-5">
+            <div className="lg:hidden fixed left-10 top-4">
                 <Circle variant="small" />                
             </div>
             {/* large */}
