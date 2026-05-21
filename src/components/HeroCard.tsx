@@ -6,9 +6,10 @@ type Props = {
     selectedId: number | null
     correctId: number | null
     showResult: boolean
+    isLocked: boolean
 }
 
-export function HeroCard({ hero, onClick, selectedId, correctId, showResult }: Props) {
+export function HeroCard({ hero, onClick, selectedId, correctId, showResult, isLocked }: Props) {
     
     const isCorrect = showResult && hero.id === correctId
     const isSelectedWrong = showResult && hero.id === selectedId && hero.id !== correctId
@@ -22,14 +23,14 @@ export function HeroCard({ hero, onClick, selectedId, correctId, showResult }: P
 
     return (
         <button
-            onClick={() => !showResult && onClick(hero)}
-            disabled={showResult}
+            onClick={() => !showResult && !isLocked && onClick(hero)}
+            disabled={isLocked}
             className={`
                 relative rounded-lg overflow-hidden transition-all duration-200 border-2 group
                 leading-none p-0 block
                 ${borderClass}
                 ${forceHover ? 'scale-105' : 'hover:scale-105'}
-                ${showResult ? 'cursor-not-allowed' : 'cursor-pointer'}
+                ${isLocked ? 'cursor-not-allowed' : 'cursor-pointer'}
             `}
         >
             <img

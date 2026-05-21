@@ -80,6 +80,9 @@ export const useGame = () => {
     //pintar fila jugador en ranking si acaba de guardar
     const [isTickRowPlayerRanking, setIsTickRowPlayerRanking] = useState(false)
 
+    //hero block click
+    const [isHeroBlockClicked, setIsHeroBlockClicked] = useState(true)
+
     // Cargamos los héroes al montar el componente
     useEffect(() => {
         // Si ya tenemos héroes en el estado (cargados desde localStorage), no hacemos la llamada a la API
@@ -146,6 +149,7 @@ export const useGame = () => {
         //solo pasa de ronda hasta que llegue al TOTAL_ROUNDS
         if (roundsPlayed + 1 < TOTAL_ROUNDS) {
             setShowResult(false)
+            setIsHeroBlockClicked(false) //desbloquear click en hero block para la nueva ronda
             setSelectedId(null)
             setRoundsPlayed(p => p + 1)
         } else {
@@ -162,6 +166,7 @@ export const useGame = () => {
         clearInterval(intervalRef.current!)
         intervalRef.current = null
 
+        setIsHeroBlockClicked(true) //bloquear click en hero block
         setSelectedId(hero.id)
         setShowResult(true)
         setTimeLeft(0)
@@ -263,7 +268,9 @@ export const useGame = () => {
             // Pausar: matar el interval
             clearInterval(intervalRef.current!)
             intervalRef.current = null
+            setIsHeroBlockClicked(true) //bloquear click en hero block
         } else {
+            setIsHeroBlockClicked(false) //desbloquear click en hero block
             // Reanudar: pero solo si no hay uno corriendo ya
             if (intervalRef.current) return
 
@@ -294,6 +301,7 @@ export const useGame = () => {
         setIsPaused(false) // si estaba pausado al reiniciar
         setGameOver(false)
         setIsTickRowPlayerRanking(false) //despintar fila
+        setIsHeroBlockClicked(false) //resetear click en hero block
     }
 
     //abrir modal
@@ -322,7 +330,9 @@ export const useGame = () => {
     }, [saveTriggered])
 
     return {    
-        game: { score, streak, roundsPlayed, loading, total_rounds : TOTAL_ROUNDS },
+        game: { score, streak, roundsPlayed, loading, total_rounds : TOTAL_ROUNDS,
+            isHeroBlockClicked
+         },
         timer: { timeLeft, isPaused, setIsPaused },
         round: {             
             roundResults, 

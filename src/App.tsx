@@ -117,6 +117,7 @@ function App() {
 									selectedId={round.selectedId}
 									correctId={round.showResult ? (round.targetHero?.id ?? null) : null}
 									showResult={round.showResult}
+									isLocked={game.isHeroBlockClicked}
 								/>
 							</motion.div>
 						))}
