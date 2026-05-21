@@ -57,8 +57,8 @@ function App() {
 				</div>
 
 				{/* COLUMNA CENTRO: Grid */}
-				<div className="pt-4 lg:pt-8">
-					<h1 className="text-4xl font-bold text-cyan-400 text-center mb-4 lg:mb-8">
+				<div className="pt-0 lg:pt-8">
+					<h1 className="text-4xl font-bold text-cyan-400 text-center mb-0 lg:mb-8">
 						Dota 2 Quiz
 					</h1>
 
