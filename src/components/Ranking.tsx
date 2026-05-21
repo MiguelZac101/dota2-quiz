@@ -21,11 +21,7 @@ export const Ranking = ({ ranking, isOpen, setIsOpen , tickRow, setTickRow }: Ra
 
     const list = (
         <>
-            <h2 className="block lg:hidden text-white text-2xl font-bold text-center mb-4">Ranking</h2>
-
-            <div className="hidden lg:flex items-center justify-center p-5 lg:mb-8">
-                <p className="text-gray-400 text-sm uppercase tracking-widest">Ranking</p>
-            </div>
+            <h2 className="text-white text-2xl font-bold text-center mb-4">Ranking</h2>
 
             <div className="flex flex-col gap-2">
 
@@ -50,23 +46,27 @@ export const Ranking = ({ ranking, isOpen, setIsOpen , tickRow, setTickRow }: Ra
 
     return (
         <>
-            {/* Botón medalla: solo móvil */}
-            <div className="fixed top-4 right-4 z-40 lg:hidden">
-                <div className="relative w-10 h-10 cursor-pointer group" onClick={() => setIsOpen(true)}>
-                    <svg className="transform -rotate-90 w-10 h-10">
-                        <circle cx={20} cy={20} r={17} stroke="#374151" strokeWidth={3} fill="transparent" />
-                        <circle cx={20} cy={20} r={17} stroke="#f59e0b" strokeWidth={3} fill="transparent" />
+            {/* Botón medalla */}
+            <div className="fixed md:relative top-4 md:top-0 right-4 md:right-0 z-40 ">
+                <div className="relative w-6 h-6 md:w-12 md:h-12 cursor-pointer group" onClick={() => setIsOpen(true)} title="Mostrar Ranking">
+                    <svg className="w-6 h-6 md:w-12 md:h-12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M7 4h10v6a5 5 0 01-10 0V4z" />
+                        <path strokeLinecap="round" d="M4 4h3M17 4h3M4 4c0 3 1.5 5 3 6M20 4c0 3-1.5 5-3 6" />
+                        <path strokeLinecap="round" d="M12 15v4M9 19h6" />
                     </svg>
-                    <div className="absolute inset-0 flex items-center justify-center">
-                        <span className="text-lg">🏅</span>
-                    </div>
                 </div>
             </div>
 
-            {/* Panel: solo móvil */}
+            {/* Modal con lista */}
             {isOpen && (
-                <div className="fixed inset-0 bg-black/60 z-50 lg:hidden flex items-start justify-center pt-4 px-4">
-                    <div className="bg-gray-800 rounded-xl  p-4 lg:p-6 w-full relative">
+                <div className="fixed inset-0 bg-black/60 z-50 flex items-start justify-center p-4 mb-10" 
+                    onClick={() => {
+                                    setIsOpen(false)
+                                    setTickRow(false)
+                                }
+                            }
+                    >
+                    <div className="relative bg-gray-800 rounded-xl p-4 lg:p-6 w-full md:w-[700px] overflow-y-auto h-screen">
                         <button
                             onClick={() => {
                                     setIsOpen(false)
@@ -84,10 +84,6 @@ export const Ranking = ({ ranking, isOpen, setIsOpen , tickRow, setTickRow }: Ra
                 </div>
             )}
 
-            {/* Listado directo: solo desktop */}
-            <div className="hidden lg:block">
-                {list}
-            </div>
         </>
     )
 }

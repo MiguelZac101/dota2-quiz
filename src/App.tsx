@@ -145,12 +145,13 @@ function App() {
 				</div>
 
 				{/* COLUMNA DER: solo desktop */}				
-				<div className="lg:block lg:mt-[103px] lg:mr-8">
+				<div className="lg:mt-[196px]">
 					
+					{/* Ranking */}
 					<Ranking 
 						ranking={ranking.ranking} 
-						isOpen={ranking.isRankingMovilOpen} 
-						setIsOpen={ranking.setIsRankingMovilOpen} 
+						isOpen={ranking.isModalOpen} 
+						setIsOpen={ranking.setIsModalOpen} 
 						tickRow={ranking.isTickRowPlayerRanking}
 						setTickRow={ranking.setIsTickRowPlayerRanking}
 					/>					
@@ -165,7 +166,7 @@ function App() {
 					modal.setPlayerName(name)
 					modal.setShowModal(false)
 					modal.setSaveTriggered( prev => prev + 1 )
-					ranking.setIsRankingMovilOpen(true) //abrir ranking
+					ranking.setIsModalOpen(true) //abrir ranking
 				}}
 				onCancel={() => modal.setShowModal(false)}
 			/>

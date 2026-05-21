@@ -76,7 +76,7 @@ export const useGame = () => {
     const [gameOver, setGameOver] = useState(false)
 
     //controlar apertura del ranking en movil
-    const [isRankingMovilOpen, setIsRankingMovilOpen] = useState(false)
+    const [isModalOpen, setIsModalOpen] = useState(false)
     //pintar fila jugador en ranking si acaba de guardar
     const [isTickRowPlayerRanking, setIsTickRowPlayerRanking] = useState(false)
 
@@ -343,7 +343,7 @@ export const useGame = () => {
             roundHeroes, 
             gameHeroes, questionSelect, targetHero, selectedId, showResult },
         ranking: { 
-            ranking, isRankingMovilOpen, setIsRankingMovilOpen, 
+            ranking, isModalOpen, setIsModalOpen, 
             isTickRowPlayerRanking,setIsTickRowPlayerRanking },
         modal: { showModal, setShowModal, playerName, setPlayerName, setSaveTriggered },
         actions: { handleAnswer, onRestart, goToNextRound },                
