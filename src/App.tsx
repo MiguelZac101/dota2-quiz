@@ -153,8 +153,8 @@ function App() {
 						ranking={ranking.ranking} 
 						isOpen={ranking.isModalOpen} 
 						setIsOpen={ranking.setIsModalOpen} 
-						tickRow={ranking.isTickRowPlayerRanking}
-						setTickRow={ranking.setIsTickRowPlayerRanking}
+						idMarkRow={ranking.idLastRowRankingSave}
+						setIdMarkRow={ranking.setIdLastRowRankingSave}
 					/>					
 					
 				</div>

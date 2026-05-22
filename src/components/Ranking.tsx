@@ -9,28 +9,24 @@ type RankingProps = {
     ranking: RankingType[]
     isOpen: boolean
     setIsOpen: (value:boolean) => void
-    tickRow: boolean
-    setTickRow: (value:boolean) => void
+    idMarkRow: string | false
+    setIdMarkRow: (value:string|false) => void
 }
 
-export const Ranking = ({ ranking, isOpen, setIsOpen , tickRow, setTickRow }: RankingProps) => {   
+export const Ranking = ({ ranking, isOpen, setIsOpen , idMarkRow, setIdMarkRow }: RankingProps) => {   
     
-    const lastPlayer = ranking.at(-1)// último agregado
-    
-    const sorted = [...ranking].sort((a, b) => b.points - a.points)
-
     const list = (
         <>
             <h2 className="text-white text-2xl font-bold text-center mb-4">Ranking</h2>
 
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col gap-2 mb-10">
 
-                {sorted.length === 0 && (
+                {ranking.length === 0 && (
                     <p className="text-gray-400 text-center">No hay entradas aún</p>
                 )}
 
-                {sorted.map((entry, index) => (
-                    <div key={entry.id} className={`flex items-center justify-between ${(entry.id === lastPlayer?.id && tickRow) ? 'bg-gray-800' : 'bg-gray-700'} rounded-lg px-4 py-3`}>
+                {ranking.map((entry, index) => (
+                    <div key={entry.id} className={`flex items-center justify-between ${(entry.id == idMarkRow ) ? 'bg-gray-900' : 'bg-gray-700'} rounded-lg px-4 py-3`}>
                         <div className="flex items-center gap-3">
                             <span className="text-lg w-6 text-center">
                                 {index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : `${index + 1}.`}
@@ -47,7 +43,7 @@ export const Ranking = ({ ranking, isOpen, setIsOpen , tickRow, setTickRow }: Ra
     return (
         <>
             {/* Botón medalla */}
-            <div className="fixed md:relative top-4 md:top-0 right-4 md:right-0 z-40 ">
+            <div className="fixed md:relative top-4 md:top-0 right-4 md:right-0 z-40">
                 <div className="relative w-6 h-6 md:w-12 md:h-12 cursor-pointer group" onClick={() => setIsOpen(true)} title="Mostrar Ranking">
                     <svg className="w-6 h-6 md:w-12 md:h-12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5}>
                         <path strokeLinecap="round" strokeLinejoin="round" d="M7 4h10v6a5 5 0 01-10 0V4z" />
@@ -59,18 +55,18 @@ export const Ranking = ({ ranking, isOpen, setIsOpen , tickRow, setTickRow }: Ra
 
             {/* Modal con lista */}
             {isOpen && (
-                <div className="fixed inset-0 bg-black/60 z-50 flex items-start justify-center p-4 mb-10" 
+                <div className="fixed inset-0 bg-black/60 z-50 flex items-start justify-center p-4" 
                     onClick={() => {
                                     setIsOpen(false)
-                                    setTickRow(false)
+                                    setIdMarkRow(false)
                                 }
                             }
                     >
-                    <div className="relative bg-gray-800 rounded-xl p-4 lg:p-6 w-full md:w-[700px] overflow-y-auto h-screen">
+                    <div className="relative bg-gray-800 rounded-xl p-4 lg:p-6 w-full md:w-[700px] overflow-y-auto">
                         <button
                             onClick={() => {
                                     setIsOpen(false)
-                                    setTickRow(false)
+                                    setIdMarkRow(false)
                                 }
                             }
                             className="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors"

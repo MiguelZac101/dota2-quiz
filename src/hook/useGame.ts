@@ -74,8 +74,6 @@ export const useGame = () => {
 
     //controlar apertura del ranking en movil
     const [isModalOpen, setIsModalOpen] = useState(false)
-    //pintar fila jugador en ranking si acaba de guardar
-    const [isTickRowPlayerRanking, setIsTickRowPlayerRanking] = useState(false)
 
     //hero block click
     const [isHeroBlockClicked, setIsHeroBlockClicked] = useState(true)
@@ -83,14 +81,18 @@ export const useGame = () => {
     //save ranking
     const [loadRanking, setLoadRanking] = useState(0)
 
+    //id de fila a marcar en ranking
+    const [idLastRowRankingSave,setIdLastRowRankingSave] = useState<string|false>(false)
+
     //save ranking
     const guardarPuntaje = async (name:string, points:number) => {
-        const { error } = await supabase
+        const { data, error } = await supabase
             .from('ranking')
             .insert({ name, points })
+            .select()
 
         if (error) console.error(error)
-
+        return data?.[0]?.id
     }
 
     //get Ranking
@@ -333,7 +335,7 @@ export const useGame = () => {
         setStreak(0)     // racha
         setIsPaused(false) // si estaba pausado al reiniciar
         setGameOver(false)
-        setIsTickRowPlayerRanking(false) //despintar fila
+        setIdLastRowRankingSave(false) //despintar fila
         setIsHeroBlockClicked(false) //resetear click en hero block
     }
 
@@ -348,9 +350,14 @@ export const useGame = () => {
     useEffect(() => {
         if (!playerName) return  // evita agregar si está vacío
         
-        guardarPuntaje(playerName, score)        
-        setLoadRanking(prev => prev + 1) 
-        setIsTickRowPlayerRanking(true)// marcar fila del jugador agregado
+        const save = async () => {
+            const id = await guardarPuntaje(playerName, score)        
+            setIdLastRowRankingSave(id)
+            setLoadRanking(prev => prev + 1)             
+        }
+
+        save()
+        
         
     }, [saveTriggered])    
 
@@ -365,7 +372,8 @@ export const useGame = () => {
             gameHeroes, questionSelect, targetHero, selectedId, showResult },
         ranking: { 
             ranking, isModalOpen, setIsModalOpen, 
-            isTickRowPlayerRanking,setIsTickRowPlayerRanking },
+            idLastRowRankingSave, setIdLastRowRankingSave
+        },
         modal: { showModal, setShowModal, playerName, setPlayerName, setSaveTriggered },
         actions: { handleAnswer, onRestart, goToNextRound },                
         animation: {
