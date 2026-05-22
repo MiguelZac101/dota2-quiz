@@ -84,11 +84,19 @@ export const useGame = () => {
     //id de fila a marcar en ranking
     const [idLastRowRankingSave,setIdLastRowRankingSave] = useState<string|false>(false)
 
+    //obtener el País
+    const obtenerPais = async () => {
+        const res = await fetch('https://ipapi.co/json/')
+        const data = await res.json()
+        return data.country_code // "PE", "AR", "MX", etc.
+    }
+
     //save ranking
     const guardarPuntaje = async (name:string, points:number) => {
+        const country = await obtenerPais()
         const { data, error } = await supabase
             .from('ranking')
-            .insert({ name, points })
+            .insert({ name, points, country })
             .select()
 
         if (error) console.error(error)

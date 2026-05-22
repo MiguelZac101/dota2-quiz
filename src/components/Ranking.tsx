@@ -3,6 +3,7 @@ export type RankingType = {
     id?:string
     name: string
     points: number
+    country: string
 }
 
 type RankingProps = {
@@ -26,13 +27,21 @@ export const Ranking = ({ ranking, isOpen, setIsOpen , idMarkRow, setIdMarkRow }
                 )}
 
                 {ranking.map((entry, index) => (
-                    <div key={entry.id} className={`flex items-center justify-between ${(entry.id == idMarkRow ) ? 'bg-gray-900' : 'bg-gray-700'} rounded-lg px-4 py-3`}>
+                    <div key={entry.id} className={`grid grid-cols-[1fr_40px_70px] items-center ${(entry.id == idMarkRow ) ? 'bg-gray-900' : 'bg-gray-700'} rounded-lg px-4 py-3`}>
                         <div className="flex items-center gap-3">
                             <span className="text-lg w-6 text-center">
                                 {index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : `${index + 1}.`}
                             </span>
                             <span className="text-white font-medium">{entry.name}</span>
                         </div>
+                        <span>
+                            {entry.country && (
+                                <img
+                                    src={`https://flagcdn.com/24x18/${entry.country.toLowerCase()}.png`}
+                                    alt={entry.country}
+                                />
+                            )}
+                        </span>
                         <span className="text-cyan-400 font-bold">{entry.points} pts</span>
                     </div>
                 ))}
