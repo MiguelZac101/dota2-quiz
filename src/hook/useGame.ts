@@ -8,6 +8,7 @@ import { getHeroes } from '../services/heroes'
 import { getRandomElements } from '../utils/random'
 import { QUESTIONS } from '../data/questions'
 import type { Variants } from 'framer-motion'
+import { supabase } from '../supabase'
 
 export const useGame = () => {
     const [heroes, setHeroes] = useState<Hero[]>(() => {
@@ -66,11 +67,7 @@ export const useGame = () => {
     const [saveTriggered, setSaveTriggered] = useState(0)
 
     // ranking	
-    const [ranking, setRanking] = useState<RankingType[]>(() => {
-        // Intentamos cargar el ranking desde localStorage
-        const ranking = localStorage.getItem('ranking')
-        return ranking ? JSON.parse(ranking) : []
-    })
+    const [ranking, setRanking] = useState<RankingType[]>([])
 
     //control termino de juego
     const [gameOver, setGameOver] = useState(false)
@@ -82,6 +79,42 @@ export const useGame = () => {
 
     //hero block click
     const [isHeroBlockClicked, setIsHeroBlockClicked] = useState(true)
+
+    //save ranking
+    const [loadRanking, setLoadRanking] = useState(0)
+
+    //save ranking
+    const guardarPuntaje = async (name:string, points:number) => {
+        const { error } = await supabase
+            .from('ranking')
+            .insert({ name, points })
+
+        if (error) console.error(error)
+
+    }
+
+    //get Ranking
+    const obtenerRanking = async () => {
+        const { data, error } = await supabase
+            .from('ranking')
+            .select('*')            
+            .order('points', { ascending: false })
+            .limit(10)
+
+        console.log('data:', data)
+        console.error(error)
+        return data
+    }    
+
+    //load ranking data supabase
+    useEffect(() => {
+        const cargar = async () => {
+            const data = await obtenerRanking()
+            if (data) setRanking(data??[])
+        }
+        cargar()
+    }, [loadRanking])
+
 
     // Cargamos los héroes al montar el componente
     useEffect(() => {
@@ -314,20 +347,12 @@ export const useGame = () => {
     //agregar jugador al listado de ranking
     useEffect(() => {
         if (!playerName) return  // evita agregar si está vacío
-        const newRank: RankingType = {
-            id: crypto.randomUUID(),
-            name: playerName,
-            points: score
-        }
-
-        const updatedRanking = [...ranking, newRank]
-        setRanking(updatedRanking)
-        localStorage.setItem('ranking', JSON.stringify(updatedRanking))
-
-        // marcar fila del jugador agregado
-        setIsTickRowPlayerRanking(true)
-
-    }, [saveTriggered])
+        
+        guardarPuntaje(playerName, score)        
+        setLoadRanking(prev => prev + 1) 
+        setIsTickRowPlayerRanking(true)// marcar fila del jugador agregado
+        
+    }, [saveTriggered])    
 
     return {    
         game: { score, streak, roundsPlayed, loading, total_rounds : TOTAL_ROUNDS,
