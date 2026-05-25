@@ -29,36 +29,39 @@ A fan-made quiz game to test your Dota 2 hero knowledge. Guess the hero based on
 
 ## 🛠️ Tech Stack
 
-React 18 + Vite - Fast dev server, HMR, optimized builds
-TypeScript - Type safety for hero data and game state
-Tailwind CSS - Utility-first styling
-Framer Motion - Smooth animations: stagger, shake, scale
-Supabase - Global ranking database with country detection via ipapi.co
-Custom Hooks - useGame centralizes all game logic with useState/useRef
+| Technology | Description |
+| --- | --- |
+| React 18 + Vite | Fast dev server, HMR, optimized builds |
+| TypeScript | Type safety for hero data and game state |
+| Tailwind CSS | Utility-first styling |
+| Framer Motion | Smooth animations: stagger, shake, scale |
+| Supabase | Global ranking database with country detection via ipapi.co |
+| Custom Hooks | useGame centralizes all game logic with useState/useRef |
 
 ## 🚀 Getting Started
 
 ### Prerequisites
-Node.js 18+ and npm or yarn
-Supabase project with a `ranking` table
+- Node.js 18+ and npm or yarn
+- Supabase project with a `ranking` table
 
 ### Supabase Setup
-Create a table called `ranking` with these columns:
-id - uuid, primary key, default: gen_random_uuid()
-name - text
-points - int4
-country - text
-created_at - timestamptz, default: now()
+Create a table called `ranking` with these columns:  
+id - uuid, primary key, default: gen_random_uuid()  
+name - text  
+points - int4  
+country - text  
+created_at - timestamptz, default: now()  
 
 Enable RLS and add policy: Allow public inserts and selects.
 
 ### Environment Variables
+```
 Create `.env` file:
 VITE_TIME_ROUND=10
 VITE_TOTAL_ROUNDS=10
 VITE_SUPABASE_URL=your_supabase_url
 VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
-
+```
 ### Installation
 
 1. Clone the repo
@@ -75,11 +78,11 @@ Open http://localhost:5173 and start playing.
 
 ### Build for production
 
-npm run build
-npm run preview
+npm run build  
+npm run preview  
 
 ## 📂 Project Structure
-
+```
 src/
 ├── components/      HeroCard, ScoreBoard, Modals, RoundTracker, Ranking
 ├── hooks/           useGame.ts - all game logic, useSound.ts
@@ -89,6 +92,7 @@ src/
 ├── types/           hero.ts, question.ts
 ├── supabase.ts      Supabase client config
 └── App.tsx          Main layout + modals
+```
 
 ## 🎮 How to Play
 
@@ -100,13 +104,13 @@ src/
 
 ## ⚖️ Legal Disclaimer
 
-This is an unofficial fan-made project created for educational and portfolio purposes.
+This is an unofficial fan-made project created for educational and portfolio purposes.  
 
-Not affiliated with, endorsed, or sponsored by Valve Corporation.
+Not affiliated with, endorsed, or sponsored by Valve Corporation.  
 
-Dota 2, all hero images, names, and sound assets are trademarks and copyrights of Valve Corporation. All rights reserved.
+Dota 2, all hero images, names, and sound assets are trademarks and copyrights of Valve Corporation. All rights reserved.  
 
-No profit is made from this project. If you are a Valve representative and have any concerns, please contact me to take it down.
+No profit is made from this project. If you are a Valve representative and have any concerns, please contact me to take it down.  
 
 ## 🗺️ Roadmap
 
@@ -128,17 +132,17 @@ PRs welcome. For major changes, open an issue first to discuss.
 
 ## 📝 License
 
-MIT License - see LICENSE file.
+MIT License - see LICENSE file.  
 
 Note: This license covers the code only. Dota 2 assets belong to Valve Corporation.
 
 ## 🙏 Acknowledgments
 
-Valve for creating Dota 2
-Dota 2 Wiki for hero data
-Supabase for free tier backend
-Framer Motion for amazing animations
-ipapi.co for country detection
+Valve for creating Dota 2  
+Dota 2 Wiki for hero data  
+Supabase for free tier backend  
+Framer Motion for amazing animations  
+ipapi.co for country detection  
 
 ---
 
