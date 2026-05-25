@@ -62,6 +62,27 @@ function App() {
 						Dota 2 Quiz
 					</h1>
 
+					{/* Animación de racha */}
+					<div className='hidden h-8 overflow-hidden lg:flex items-center justify-center'>
+						{game.streak >= 2 && (
+							<motion.div
+								key={game.streak} // Se re-anima cada vez que sube
+								initial={{ scale: 0, opacity: 0 }} 
+								animate={{ scale: 1, opacity: 1 }}
+								exit={{ scale: 0 }}
+								className="text-center mb-2"
+							>
+								<span className="text-yellow-400 font-black text-xl tracking-wider drop-shadow-[0_0_8px_rgba(250,204,21,0.8)]">
+									{game.streak === 2 && 'KILLING SPREE x2'}
+									{game.streak === 3 && 'DOMINATING x3'}
+									{game.streak === 4 && 'MEGA KILL x4'}
+									{game.streak === 5 && 'UNSTOPPABLE x5'}
+									{game.streak >= 6 && `GODLIKE x${game.streak}`}
+								</span>
+							</motion.div>
+						)}
+					</div>
+
 					{/* Puntaje y racha */}					
 					<div className="grid grid-cols-3 items-stretch gap-4 lg:mb-8">
 
@@ -71,22 +92,7 @@ function App() {
 						</div>
 
 						{/* Puntaje número */}
-						<div className="flex flex-col items-center justify-center">
-							<div className='hidden lg:block'>
-								{game.streak >= 2 && (
-									<motion.div
-										key={game.streak}
-										initial={{ scale: 0 }}
-										animate={{ scale: 1 }}
-										className="text-yellow-400 font-bold text-xl"
-									>
-										{game.streak === 2 && 'KILLING SPREE x2'}
-										{game.streak === 3 && 'DOMINATING x3'}
-										{game.streak === 4 && 'MEGA KILL x4'}
-										{game.streak >= 5 && 'UNSTOPPABLE x' + game.streak}
-									</motion.div>
-								)}
-							</div>							
+						<div className="flex items-center justify-center">														
 							<p className="text-white font-bold text-6xl tabular-nums">
 								{String(game.score).padStart(2, '0')}
 							</p>
@@ -126,14 +132,21 @@ function App() {
 								whileHover={{ scale: 1.05 }}
 								whileTap={{ scale: 0.95 }}
 							>
-								<HeroCard
-									hero={hero}
-									onClick={actions.handleAnswer}
-									selectedId={round.selectedId}
-									correctId={round.showResult ? (round.targetHero?.id ?? null) : null}
-									showResult={round.showResult}
-									isLocked={game.isHeroBlockClicked}
-								/>
+								<motion.div
+									animate={round.selectedId === hero.id && round.targetHero?.id !== hero.id
+										? { x: [0, -10, 10, -10, 10, 0] }
+										: {}}
+									transition={{ duration: 0.4 }}
+								>
+									<HeroCard
+										hero={hero}
+										onClick={actions.handleAnswer}
+										selectedId={round.selectedId}
+										correctId={round.showResult ? (round.targetHero?.id ?? null) : null}
+										showResult={round.showResult}
+										isLocked={game.isHeroBlockClicked}
+									/>
+								</motion.div>
 							</motion.div>
 						))}
 					</motion.div>
