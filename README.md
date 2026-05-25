@@ -1,5 +1,13 @@
 # 🎯 Dota 2 Hero Quiz
 
+[![React](https://img.shields.io/badge/React-18.2-61DAFB?logo=react&logoColor=white)](https://react.dev/)
+[![Vite](https://img.shields.io/badge/Vite-5.0-646CFF?logo=vite&logoColor=white)](https://vitejs.dev/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.3-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind-3.4-06B6D4?logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
+[![Framer Motion](https://img.shields.io/badge/Framer_Motion-11.0-0055FF?logo=framer&logoColor=white)](https://www.framer.com/motion/)
+[![Supabase](https://img.shields.io/badge/Supabase-3ECF8E?logo=supabase&logoColor=white)](https://supabase.com/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
+
 A fan-made quiz game to test your Dota 2 hero knowledge. Guess the hero based on questions, build streaks, and beat your high score.
 
 ### 🔥 Play Live Demo
@@ -132,7 +140,7 @@ PRs welcome. For major changes, open an issue first to discuss.
 
 ## 📝 License
 
-MIT License - see LICENSE file.  
+MIT License - see [LICENSE](./LICENSE) file.   
 
 Note: This license covers the code only. Dota 2 assets belong to Valve Corporation.
 
