@@ -8,10 +8,10 @@ A fan-made quiz game to test your Dota 2 hero knowledge. Guess the hero based on
 ## 📸 Screenshots
 
 ### Vista principal
-![Main](./preview.png)
+<img src="./preview.png" width="800" alt="Main" />
 
 ### Vista Mobile
-![Mobile](./screenshots/mobile.png)
+<img src="./screenshots/mobile.png" width="300" alt="Mobile" />
 
 ## ✨ Features
 
