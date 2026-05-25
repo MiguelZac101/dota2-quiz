@@ -84,6 +84,9 @@ export const useGame = () => {
     //id de fila a marcar en ranking
     const [idLastRowRankingSave,setIdLastRowRankingSave] = useState<string|false>(false)
 
+    //disclaimer e instrucciones    
+    const [showHowToPlay, setShowHowToPlay] = useState(true)
+
     //obtener el País
     const obtenerPais = async () => {
         const res = await fetch('https://ipapi.co/json/')
@@ -376,6 +379,18 @@ export const useGame = () => {
         
     }, [saveTriggered])    
 
+    const closeHowToPlay = () => {
+        setShowHowToPlay(false)
+        localStorage.setItem('howToPlaySeen', 'true')
+    }
+
+    // Al montar, revisa si ya aceptó antes
+    useEffect(() => {        
+        // Si nunca vio el how to play, muéstralo
+        const seenHowTo = localStorage.getItem('howToPlaySeen')
+        if (!seenHowTo) setShowHowToPlay(true)        
+    }, [])
+
     return {    
         game: { score, streak, roundsPlayed, loading, total_rounds : TOTAL_ROUNDS,
             isHeroBlockClicked
@@ -389,7 +404,10 @@ export const useGame = () => {
             ranking, isModalOpen, setIsModalOpen, 
             idLastRowRankingSave, setIdLastRowRankingSave
         },
-        modal: { showModal, setShowModal, playerName, setPlayerName, setSaveTriggered },
+        modal: { 
+            showModal, setShowModal, playerName, setPlayerName, setSaveTriggered,            
+            showHowToPlay, setShowHowToPlay, closeHowToPlay
+        },
         actions: { handleAnswer, onRestart, goToNextRound },                
         animation: {
             container, item

@@ -29,7 +29,7 @@ function App() {
 	}
 
 	return (
-		<div className="w-full p-2 sm:p-0 bg-gray-900 text-white min-h-screen">
+		<div className="w-full p-2 sm:p-0 bg-gray-900 text-white min-h-screen overflow-x-hidden flex flex-col">
 			<div className='hidden lg:block'>
 				<RoundTracker
 					currentRound={game.roundsPlayed + 1}
@@ -183,6 +183,7 @@ function App() {
 
 			</div>
 			
+
 			<Modal
 				openModal={modal.showModal}
 				onSave={(name) => {
@@ -193,11 +194,56 @@ function App() {
 				}}
 				onCancel={() => modal.setShowModal(false)}
 			/>
+
+			{/* Modal: How to Play */}
+			{modal.showHowToPlay && (
+				<div className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4">
+					<motion.div
+						initial={{ scale: 0.8, opacity: 0 }}
+						animate={{ scale: 1, opacity: 1 }}
+						className="bg-gray-800 rounded-lg p-6 max-w-lg border border-cyan-500"
+					>
+						<h2 className="text-2xl font-bold text-cyan-400 mb-4">How to Play</h2>
+						<div className="space-y-3 text-gray-300 text-sm mb-6">
+							<p>🎯 <b>Objective:</b> Guess which hero matches the question.</p>
+							<p>⚡ <b>Streak Bonus:</b> Answer correctly in a row for x2, x3, x4... points.</p>
+							<p>⏱️ <b>Time Bonus:</b> Answer fast for +5 extra points.</p>
+							<p>🎮 <b>Rounds:</b> 10 rounds total. Beat your high score!</p>
+							<p>🔊 <b>Pro tip:</b> Turn on sound for Dota announcer voice lines.</p>
+						</div>
+						<button
+							onClick={modal.closeHowToPlay}
+							className="w-full bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-3 rounded-lg transition"
+						>
+							Let's Go!
+						</button>
+					</motion.div>
+				</div>
+			)}
 			
 
-
-
-		</div>		
+			<footer className="w-full py-6 mt-12">
+				<div className="max-w-2xl mx-auto px-4 text-center space-y-2">
+					<p className="text-gray-500 text-xs">
+						This is a fan-made game. Not affiliated with, endorsed, or sponsored by Valve Corporation.
+					</p>
+					<p className="text-gray-600 text-xs">
+						Dota 2 and all related assets are trademarks of Valve Corporation.
+					</p>
+					<p className="text-gray-600 text-xs">
+						Made with React + Vite by @MiguelZack
+					</p>
+					<button
+						onClick={() => modal.setShowHowToPlay(true)}
+						className="text-cyan-400 text-xs hover:underline mt-2"
+					>
+						How to play?
+					</button>
+				</div>
+			</footer>
+			
+		</div>	
+			
 
 	)
 }
