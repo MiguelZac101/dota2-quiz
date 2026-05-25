@@ -71,7 +71,22 @@ function App() {
 						</div>
 
 						{/* Puntaje número */}
-						<div className="flex items-center justify-center">
+						<div className="flex flex-col items-center justify-center">
+							<div className='hidden lg:block'>
+								{game.streak >= 2 && (
+									<motion.div
+										key={game.streak}
+										initial={{ scale: 0 }}
+										animate={{ scale: 1 }}
+										className="text-yellow-400 font-bold text-xl"
+									>
+										{game.streak === 2 && 'KILLING SPREE x2'}
+										{game.streak === 3 && 'DOMINATING x3'}
+										{game.streak === 4 && 'MEGA KILL x4'}
+										{game.streak >= 5 && 'UNSTOPPABLE x' + game.streak}
+									</motion.div>
+								)}
+							</div>							
 							<p className="text-white font-bold text-6xl tabular-nums">
 								{String(game.score).padStart(2, '0')}
 							</p>
