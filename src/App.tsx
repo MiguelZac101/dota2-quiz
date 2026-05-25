@@ -41,11 +41,11 @@ function App() {
 			</div>	
 			
 			{/* LAYOUT DESKTOP: 3 columnas */}
-			<div className="lg:grid lg:grid-cols-3 lg:gap-8 lg:items-start">
+			<div className="lg:grid lg:grid-cols-3 lg:gap-6 lg:items-start">
 
 				{/* COLUMNA IZQ: solo desktop */}				
 				
-				<div className="lg:mt-[196px]">
+				<div className="lg:mt-[164px]">
 					{/* Contenido Timer / Restart */}
 					<div className="flex flex-col items-end gap-0 lg:gap-4">						
 
@@ -57,13 +57,13 @@ function App() {
 				</div>
 
 				{/* COLUMNA CENTRO: Grid */}
-				<div className="pt-0 lg:pt-8">
-					<h1 className="text-4xl font-bold text-cyan-400 text-center mb-0 lg:mb-8">
+				<div className="pt-0 lg:pt-6">
+					<h1 className="text-4xl font-bold text-cyan-400 text-center mb-2 lg:mb-6">
 						Dota 2 Quiz
 					</h1>
 
-					{/* Animación de racha */}
-					<div className='hidden h-8 overflow-hidden lg:flex items-center justify-center'>
+					{/* Animación de racha */}					
+					<div className={`${game.streak >= 2 ? 'h-8' : 'h-0'} overflow-hidden lg:flex items-center justify-center transition-all duration-200`}>
 						{game.streak >= 2 && (
 							<motion.div
 								key={game.streak} // Se re-anima cada vez que sube
@@ -84,7 +84,7 @@ function App() {
 					</div>
 
 					{/* Puntaje y racha */}					
-					<div className="grid grid-cols-3 items-stretch gap-4 lg:mb-8">
+					<div className="grid grid-cols-3 items-stretch gap-4 mb-2 lg:mb-4">
 
 						{/* Puntaje texto */}
 						<div className="flex items-center justify-center border-r border-gray-700 pr-4">
@@ -93,7 +93,7 @@ function App() {
 
 						{/* Puntaje número */}
 						<div className="flex items-center justify-center">														
-							<p className="text-white font-bold text-6xl tabular-nums">
+							<p className="text-white font-bold text-4xl lg:text-6xl tabular-nums">
 								{String(game.score).padStart(2, '0')}
 							</p>
 						</div>
@@ -123,7 +123,7 @@ function App() {
 						variants={animation.container}
 						initial="hidden"
 						animate="show"
-						className="grid grid-cols-3 gap-2 sm:gap-4 mb-8"
+						className="grid grid-cols-3 gap-2 sm:gap-4 mb-2 lg:mb-4"
 					>
 						{round.gameHeroes.map((hero) => (
 							<motion.div
@@ -174,7 +174,7 @@ function App() {
 				</div>
 
 				{/* COLUMNA DER: solo desktop */}				
-				<div className="lg:mt-[196px]">
+				<div className="lg:mt-[164px]">
 					
 					{/* Ranking */}
 					<Ranking 

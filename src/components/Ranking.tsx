@@ -52,9 +52,9 @@ export const Ranking = ({ ranking, isOpen, setIsOpen , idMarkRow, setIdMarkRow }
     return (
         <>
             {/* Botón medalla */}
-            <div className="fixed md:relative top-4 md:top-0 right-4 md:right-0 z-40">
-                <div className="relative w-6 h-6 md:w-12 md:h-12 cursor-pointer group" onClick={() => setIsOpen(true)} title="Mostrar Ranking">
-                    <svg className="w-6 h-6 md:w-12 md:h-12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5}>
+            <div className="fixed md:relative top-4 md:top-0 right-2 md:right-0 z-40">
+                <div className="relative w-8 h-8 md:w-12 md:h-12 cursor-pointer group" onClick={() => setIsOpen(true)} title="Ranking">
+                    <svg className="w-8 h-8 md:w-12 md:h-12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5}>
                         <path strokeLinecap="round" strokeLinejoin="round" d="M7 4h10v6a5 5 0 01-10 0V4z" />
                         <path strokeLinecap="round" d="M4 4h3M17 4h3M4 4c0 3 1.5 5 3 6M20 4c0 3-1.5 5-3 6" />
                         <path strokeLinecap="round" d="M12 15v4M9 19h6" />
