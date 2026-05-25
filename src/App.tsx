@@ -132,12 +132,6 @@ function App() {
 								whileHover={{ scale: 1.05 }}
 								whileTap={{ scale: 0.95 }}
 							>
-								<motion.div
-									animate={round.selectedId === hero.id && round.targetHero?.id !== hero.id
-										? { x: [0, -10, 10, -10, 10, 0] }
-										: {}}
-									transition={{ duration: 0.4 }}
-								>
 									<HeroCard
 										hero={hero}
 										onClick={actions.handleAnswer}
@@ -146,7 +140,7 @@ function App() {
 										showResult={round.showResult}
 										isLocked={game.isHeroBlockClicked}
 									/>
-								</motion.div>
+							
 							</motion.div>
 						))}
 					</motion.div>

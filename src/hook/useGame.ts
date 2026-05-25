@@ -227,6 +227,9 @@ export const useGame = () => {
             setStreak(prev => prev + 1)
 
         } else {
+            // Vibra más fuerte al fallar: 100ms
+            if (navigator.vibrate) navigator.vibrate([100, 50, 100])
+    
             soundPromise = playWrong(2000) // Sonido error
             setStreak(0) // Reiniciar la racha si se responde incorrectamente
         }
