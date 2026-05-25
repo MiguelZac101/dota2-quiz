@@ -217,6 +217,10 @@ export const useGame = () => {
         let soundPromise: Promise<void>
 
         if (targetHero && hero.id === targetHero.id) {
+
+            // Haptic: vibra el celular 50ms al acertar
+            if (navigator.vibrate) navigator.vibrate(50)
+
             soundPromise = getStreakSound(streak + 1) // Reproducir sonido de racha
             const puntosGanados = 10 * (streak + 1) // Base 10 * multiplicador
             setScore(prev => prev + puntosGanados)
